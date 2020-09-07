@@ -13,4 +13,6 @@ public interface AdressServiceInt {
     void delete(int adressID);
 
     Adress getById(int adressID);
+
+    List<Adress> findAdressByStudentId(int studentId);
 }

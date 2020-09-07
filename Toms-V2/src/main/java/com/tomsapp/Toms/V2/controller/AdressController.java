@@ -24,9 +24,9 @@ public class AdressController {
     StudentService studentService;
 
    @GetMapping("/showAdress")
-    public String showAdressForm(Model model,@RequestParam("studentId") int Id){
-       Students students = studentService.findbyId(Id);
-       List<Adress> adresses = adressServiceInt.listofAdreeses().stream().filter(s->s.getAdressStudents().equals(students)).collect(Collectors.toList());
+    public String showAdressForm(Model model,@RequestParam("studentId") int studentId){
+       Students students = studentService.findbyId(studentId);
+       List<Adress> adresses = adressServiceInt.findAdressByStudentId(studentId);
        model.addAttribute("adress",adresses);
        model.addAttribute("viewStudent",students);
 

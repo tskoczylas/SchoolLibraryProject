@@ -33,7 +33,7 @@ public class StudentService implements StudentServiceInt {
             Students students1 = principal.getStudents();
             students.add(students1);
             return students;}
-        else if(authentication.isAuthenticated()&&listOfAuthorities.contains(RoleEnum.ROLE_USER.name())){
+        else if(authentication.isAuthenticated()&&listOfAuthorities.contains(RoleEnum.ROLE_ADMIN.name())){
             return studentsRepository.findAll(); }
         else return Collections.emptyList();
     }

@@ -6,38 +6,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class AdressService implements AdressServiceInt {
 
-    @Autowired
     AdressRepository adressRepository;
 
+    @Autowired
+    public AdressService(AdressRepository adressRepository) {
+        this.adressRepository = adressRepository;
+    }
 
-    @Transactional
+
+
+
     @Override
     public List<Adress> listofAdreeses() {
         return adressRepository.findAll();
     }
 
-    @Transactional
     @Override
     public void save(Adress adress) {
         adressRepository.save(adress);
     }
 
-    @Transactional
     @Override
     public void delete(int adressID) {
         adressRepository.deleteById(adressID);
     }
 
-    @Transactional
     @Override
     public Adress getById(int adressID) {
         return adressRepository.getOne(adressID);
+    }
+
+    @Override
+    public List<Adress> findAdressByStudentId(int studentId) {
+        Optional<List<Adress>> findAdressByStudentId =
+                adressRepository.
+                        findAdressByAdressStudents_Id(studentId);
+        return findAdressByStudentId.orElse(Collections.emptyList());
+
+
     }
 
 }
