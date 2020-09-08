@@ -44,8 +44,6 @@ public class AdressController {
    @PostMapping("/save")
     public String saveAdress(@Valid  @ModelAttribute("addAdress") Adress adress,BindingResult bidingresult, @RequestParam("studentId") int studentID){
 
-       System.out.println(bidingresult.hasFieldErrors());
-
        if(bidingresult.hasErrors()) {return  "redirect:/adress/add?studentId="+studentID;}
 
        Students students = studentService.findbyId(studentID);
@@ -55,14 +53,12 @@ public class AdressController {
        return "redirect:/adress/showAdress?studentId="+studentID;
    }
    @GetMapping("/delete")
-   public String deleteAdress(@RequestParam("adressId") int adressID){
+   public String deleteAdress(@RequestParam("adressId") int adressId){
 
-       Adress adress = adressServiceInt.getById(adressID);
-       int studentId = adress.getAdressStudents().getId();
-       adressServiceInt.delete(adressID);
+       Students studentById = adressServiceInt.deleteAndFindStudent(adressId);
 
 
-       return "redirect:/adress/showAdress?studentId="+studentId;
+       return "redirect:/adress/showAdress?studentId="+studentById.getId();
    }
 
 

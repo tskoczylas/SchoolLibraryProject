@@ -36,6 +36,14 @@ public class Adress {
     @JoinColumn(name = "student_id")
     Students adressStudents;
 
+    public Adress(int id, @NonNull @NotBlank @Size(min = 5, max = 15) String adress, @NonNull @NotBlank @Size(min = 5, max = 15) String postCode, @NonNull @NotBlank @Size(min = 5, max = 15) String coutry, Students adressStudents) {
+        this.id = id;
+        this.adress = adress;
+        this.postCode = postCode;
+        this.coutry = coutry;
+        this.adressStudents = adressStudents;
+    }
+
     public int getId() {
         return id;
     }

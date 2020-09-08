@@ -11,4 +11,5 @@ public interface AdressRepository extends JpaRepository<Adress, Integer> {
 
 
    Optional<List<Adress>> findAdressByAdressStudents_Id(int studentId);
+
 }

@@ -91,8 +91,11 @@ RoleService roleService;
     ){
 
         if(bindingResult.hasErrors()) return "addStudentForm";
-       // tempStudents.setRolesSet(Collections.singleton(new Role(RoleEnum.ROLE_USER)));
+        Role byId = roleService.getById(2);
+        List<Role> roleList=Arrays.asList(byId);
+        tempStudents.setRolesSet(roleList);
         tempStudents.setPassword(passwordEncoder.encode(tempStudents.getPassword()));
+        tempStudents.setEnabled(true);
 
         studentService.saveSrudent(tempStudents);
         return "redirect:/students/list";

@@ -1,6 +1,7 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Adress;
+import com.tomsapp.Toms.V2.entity.Students;
 
 import java.util.List;
 
@@ -10,9 +11,7 @@ public interface AdressServiceInt {
 
     void save(Adress adress);
 
-    void delete(int adressID);
-
-    Adress getById(int adressID);
-
     List<Adress> findAdressByStudentId(int studentId);
+
+    Students deleteAndFindStudent(int adressId);
 }
