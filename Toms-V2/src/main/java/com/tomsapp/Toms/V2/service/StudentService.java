@@ -2,6 +2,7 @@ package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.RoleEnum;
 import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import com.tomsapp.Toms.V2.security.StudentUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,8 @@ public class StudentService implements StudentServiceInt {
     public Students findbyId(int studentId) {
         if(studentsRepository.findById(studentId).isPresent())
             return studentsRepository.findById(studentId).get();
-        else throw new NullPointerException("Nie ma takiego uztkownika");
+        else throw new NoSuchUserExeptions();
+
 
     }
 

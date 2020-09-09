@@ -9,7 +9,7 @@ public interface AdressServiceInt {
 
     List<Adress> listofAdreeses();
 
-    void save(Adress adress);
+    void save(Adress adress, int studentID);
 
     List<Adress> findAdressByStudentId(int studentId);
 

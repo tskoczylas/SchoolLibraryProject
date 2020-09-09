@@ -4,8 +4,8 @@ import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Students;
 import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.AdressRepository;
+import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.expression.spel.ast.OpInc;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +24,8 @@ class AdressServiceTest {
     void listofAdreesesShuldProvideListOfAddresses() {
         //given
         AdressRepository adressRepository = mock(AdressRepository.class);
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findAll()).thenReturn(Arrays.asList(new Adress(),new Adress()));
         //then
@@ -39,11 +40,14 @@ class AdressServiceTest {
       Adress tempAddress =
               new Adress(1, "Simple", "Simple", "Simple", null);
 
-            AdressRepository adressRepository = mock(AdressRepository.class);
-            AdressService adressService = new AdressService(adressRepository);
+        AdressRepository adressRepository = mock(AdressRepository.class);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
             //when
+        when(studentsRepository.findById(1)).thenReturn(Optional.empty());
+
             //then
-            assertThrows(NoSuchUserExeptions.class,()->adressService.save(tempAddress));
+            assertThrows(NoSuchUserExeptions.class,()->adressService.save(tempAddress, 1));
         }
 
     @Test
@@ -51,14 +55,17 @@ class AdressServiceTest {
         //given
         Students tempStudent = new Students();
         Adress tempAddress =
-                new Adress(1, "Simple", "Simple", "Simple", new Students());
+                new Adress(1, "Simple", "Simple", "Simple",null);
 
         AdressRepository adressRepository = mock(AdressRepository.class);
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
-        adressService.save(tempAddress);
+        when(studentsRepository.findById(1)).thenReturn(Optional.of(tempStudent));
+        adressService.save(tempAddress, 1);
         //then
         verify(adressRepository).save(tempAddress);
+        assertThat(tempAddress.getAdressStudents(),equalTo(tempStudent));
 
 
     }
@@ -72,7 +79,8 @@ class AdressServiceTest {
         //given
         AdressRepository adressRepository = mock(AdressRepository.class);
         Optional<List<Adress>> tempAdress = Optional.of(Collections.singletonList(new Adress()));
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findAdressByAdressStudents_Id(1)).
                 thenReturn(tempAdress);
@@ -87,9 +95,10 @@ class AdressServiceTest {
     @Test
     void FindAdressByStudentIdShuldReturnEmptyList() {
         //given
-        AdressRepository adressRepository = mock(AdressRepository.class);
         Optional<List<Adress>> tempAdress = Optional.of(Collections.singletonList(new Adress()));
-        AdressService adressService = new AdressService(adressRepository);
+        AdressRepository adressRepository = mock(AdressRepository.class);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findAdressByAdressStudents_Id(1)).
                 thenReturn(tempAdress);
@@ -107,7 +116,8 @@ class AdressServiceTest {
         Optional<Adress> adress = Optional.of(
                 new Adress(1, "Simple", "Simple", "Simple", tempStudent));
         AdressRepository adressRepository = mock(AdressRepository.class);
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findById(1)).thenReturn(adress);
         //then
@@ -120,7 +130,8 @@ class AdressServiceTest {
         Optional<Adress> adress = Optional.of(
                 new Adress(1, "Simple", "Simple", "Simple", null));
         AdressRepository adressRepository = mock(AdressRepository.class);
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findById(1)).thenReturn(adress);
         //then
@@ -131,7 +142,8 @@ class AdressServiceTest {
     void deleteAndFindStudentShouldThrownNoSouthUserExertionWhenAddressDoesNotExist() {
         //given
         AdressRepository adressRepository = mock(AdressRepository.class);
-        AdressService adressService = new AdressService(adressRepository);
+        StudentsRepository studentsRepository=mock(StudentsRepository.class);
+        AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
         when(adressRepository.findById(1)).thenReturn(Optional.empty());
         //then

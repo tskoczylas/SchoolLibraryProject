@@ -4,13 +4,12 @@ import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Students;
 import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.AdressRepository;
+import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 
@@ -18,12 +17,14 @@ import java.util.Optional;
 public class AdressService implements AdressServiceInt {
 
     AdressRepository adressRepository;
+    StudentsRepository studentsRepository;
+
 
     @Autowired
-    public AdressService(AdressRepository adressRepository) {
+    public AdressService(AdressRepository adressRepository, StudentsRepository studentsRepository) {
         this.adressRepository = adressRepository;
+        this.studentsRepository = studentsRepository;
     }
-
 
 
 
@@ -33,10 +34,18 @@ public class AdressService implements AdressServiceInt {
     }
 
     @Override
-    public void save(Adress adress) {
+    public void save(Adress adress, int studentID) {
 
-        if(adress.getAdressStudents()==null) throw new  NoSuchUserExeptions();
-        else adressRepository.save(adress);
+        Optional<Students> optionalStudents = studentsRepository.findById(studentID);
+
+        optionalStudents.ifPresent(student ->{
+            adress.setAdressStudents(student);
+            adressRepository.save(adress);
+        });
+
+        if(!optionalStudents.isPresent()){
+            throw new  NoSuchUserExeptions();
+        }
     }
 
 
