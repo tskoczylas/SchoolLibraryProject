@@ -26,7 +26,7 @@
     </tr>
 
     <tr th:each="ad : ${adress}"   >
-        <td  th:text="*{ad.adress}" >
+        <td  th:text="*{ad.street}" >
             <td th:text ="*{ad.coutry}">
         <td th:text ="*{ad.postCode}">
         <td> <a th:href="@{/adress/delete(adressId=${ad.id})}"> Delete </a>  </td>

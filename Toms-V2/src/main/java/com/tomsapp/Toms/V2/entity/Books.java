@@ -7,28 +7,19 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "books2")
+
 public class Books {
 
-    @Column(name = "id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
    private int id;
 
 
 
-    @Column(name = "title")
    private String title;
-    @Column(name = "author")
    private String author;
-
-    @Column(name = "ibns")
    private String ibns;
-
-   @Column(name = "total_ammount")
    private int totalNumber;
-
-   @Column(name ="create_date")
    @CreationTimestamp
    private Timestamp date;
 

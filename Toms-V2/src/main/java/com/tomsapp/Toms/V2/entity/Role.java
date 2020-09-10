@@ -1,7 +1,5 @@
 package com.tomsapp.Toms.V2.entity;
 
-import org.springframework.scheduling.support.SimpleTriggerContext;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,12 +16,17 @@ public class Role {
 
     }
 
+    public Role(int id, RoleEnum role) {
+        this.id = id;
+        this.role = role;
+    }
+
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "students_role",
             joinColumns =@JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn( name = "student_id")
     )
-    List<Students> students;
+    List<Student> students;
 
     public Role() {
     }
@@ -44,11 +47,11 @@ public class Role {
         this.role = role;
     }
 
-    public List<Students> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Students> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 }

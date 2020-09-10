@@ -1,8 +1,6 @@
 package com.tomsapp.Toms.V2.security;
 
-import com.tomsapp.Toms.V2.entity.Students;
 import com.tomsapp.Toms.V2.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,9 +1,8 @@
 package com.tomsapp.Toms.V2.controller;
 
 import com.tomsapp.Toms.V2.entity.Adress;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.AdressServiceInt;
-import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/adress")
@@ -33,13 +31,13 @@ public class AdressController {
     public String showAdressForm(Model model,
                                  @RequestParam("studentId") int studentId){
 
-       Students students = studentServiceInt
+       Student student = studentServiceInt
                .findbyId(studentId);
        List<Adress> adresses = adressServiceInt.
                findAdressByStudentId(studentId);
 
        model.addAttribute("adress",adresses);
-       model.addAttribute("viewStudent",students);
+       model.addAttribute("viewStudent", student);
 
   return "showAdressForm";
    }
@@ -49,11 +47,11 @@ public class AdressController {
 
        model.addAttribute("addAdress",new Adress());
 
-       Students students =
+       Student student =
                studentServiceInt.
                        findbyId(studentId);
 
-       model.addAttribute("viewStudent",students);
+       model.addAttribute("viewStudent", student);
        return "addAdressForm";
    }
 
@@ -72,7 +70,7 @@ public class AdressController {
    @GetMapping("/delete")
    public String deleteAdress(@RequestParam("adressId") int adressId){
 
-       Students studentById =
+       Student studentById =
                adressServiceInt.
                        deleteAndFindStudent(adressId);
 

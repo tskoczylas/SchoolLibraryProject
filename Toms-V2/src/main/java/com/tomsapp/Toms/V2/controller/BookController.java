@@ -1,7 +1,7 @@
 package com.tomsapp.Toms.V2.controller;
 
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.BooksServiceInt;
 import com.tomsapp.Toms.V2.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class BookController {
     public String addBooks(Model model) {
 
         Books books = new Books();
-        List<Students> students = studentService.getStudents();
+        List<Student> students = studentService.getStudents();
 
         model.addAttribute("booksadd", books);
 
@@ -64,7 +64,7 @@ public class BookController {
 
     @GetMapping("/update")
     public String updateBooks(@RequestParam("booksId") int bookId, Model model) {
-        List<Students> students = studentService.getStudents();
+        List<Student> students = studentService.getStudents();
 
 
         model.addAttribute("shstudents", students);

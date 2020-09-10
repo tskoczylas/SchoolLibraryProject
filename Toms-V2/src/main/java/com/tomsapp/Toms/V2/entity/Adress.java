@@ -1,10 +1,8 @@
 package com.tomsapp.Toms.V2.entity;
 
-import jdk.internal.instrumentation.InstrumentationMethod;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -13,35 +11,30 @@ import javax.validation.constraints.Size;
 public class Adress {
     @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
-     @Column(name = "id")
     int id;
     @NonNull
     @NotBlank
     @Size(min = 5, max = 15)
-    @Column(name = "street")
-    private String adress;
+    private String street;
 
     @NonNull
     @NotBlank
     @Size(min = 5, max = 15)
-    @Column(name = "post_code")
     private String postCode;
 
     @NonNull
     @NotBlank
     @Size(min = 5, max = 15)
-    @Column(name = "country")
     private String coutry;
     @ManyToOne()
-    @JoinColumn(name = "student_id")
-    Students adressStudents;
+    Student adressStudent;
 
-    public Adress(int id, @NonNull @NotBlank @Size(min = 5, max = 15) String adress, @NonNull @NotBlank @Size(min = 5, max = 15) String postCode, @NonNull @NotBlank @Size(min = 5, max = 15) String coutry, Students adressStudents) {
+    public Adress(int id, @NonNull @NotBlank @Size(min = 5, max = 15) String street, @NonNull @NotBlank @Size(min = 5, max = 15) String postCode, @NonNull @NotBlank @Size(min = 5, max = 15) String coutry, Student adressStudent) {
         this.id = id;
-        this.adress = adress;
+        this.street = street;
         this.postCode = postCode;
         this.coutry = coutry;
-        this.adressStudents = adressStudents;
+        this.adressStudent = adressStudent;
     }
 
     public int getId() {
@@ -55,12 +48,13 @@ public class Adress {
     public Adress() {
     }
 
-    public String getAdress() {
-        return adress;
+
+    public String getStreet() {
+        return street;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getPostCode() {
@@ -79,11 +73,11 @@ public class Adress {
         this.coutry = coutry;
     }
 
-    public Students getAdressStudents() {
-        return adressStudents;
+    public Student getAdressStudent() {
+        return adressStudent;
     }
 
-    public void setAdressStudents(Students adressStudents) {
-        this.adressStudents = adressStudents;
+    public void setAdressStudent(Student adressStudent) {
+        this.adressStudent = adressStudent;
     }
 }

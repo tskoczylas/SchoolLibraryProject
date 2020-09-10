@@ -2,8 +2,7 @@ package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.dto.BorrowingDto;
 import com.tomsapp.Toms.V2.entity.Borrowing;
-import com.tomsapp.Toms.V2.entity.Students;
-import com.tomsapp.Toms.V2.security.StudentUser;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.mapper.BorrowingMapper;
 import com.tomsapp.Toms.V2.repository.BorrowingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class BorrowingService implements BorrowingServiceInt{
     @Autowired
     StudentService  studentService;
 
-    List<Students> findUser(){
+    List<Student> findUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Set<SimpleGrantedAuthority> userRole = Collections.singleton(new SimpleGrantedAuthority("ROlE_USER"));
         Set<SimpleGrantedAuthority> adminRole = Collections.singleton(new SimpleGrantedAuthority("ROlE_ADMIN"));
@@ -38,7 +37,7 @@ public class BorrowingService implements BorrowingServiceInt{
 
 
         if(authentication.isAuthenticated()&&authentication.getAuthorities().equals(userRole)){
-        return Collections.singletonList((Students) authentication.getPrincipal());}
+        return Collections.singletonList((Student) authentication.getPrincipal());}
         else if(authentication.isAuthenticated()&&authentication.getAuthorities().equals(adminRole)){
             return studentService.getStudents(); }
         else return Collections.emptyList();

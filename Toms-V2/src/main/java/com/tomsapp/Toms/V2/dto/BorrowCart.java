@@ -2,7 +2,7 @@ package com.tomsapp.Toms.V2.dto;
 
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Borrowing;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class BorrowCart {
     @Autowired
     private BorrowingServiceInt borrowingServiceInt;
 
-    private Students student;
+    private Student student;
     private Books books;
     @NotNull
     @Min(1)
@@ -61,7 +61,7 @@ public class BorrowCart {
     public void saveToBorrowing(){
 
         Borrowing borrowing = new Borrowing();
-        borrowing.setStudents(student);
+        borrowing.setStudent(student);
         borrowing.setBooks(books);
         books.setTotalNumber(books.getTotalNumber() - 1);
         borrowing.setEndBorrowDate(LocalDateTime.now().plusDays(borrowDays));
@@ -82,7 +82,7 @@ public class BorrowCart {
 
     }
 
-    public Students getStudent() {
+    public Student getStudent() {
         return student;
     }
 
@@ -90,7 +90,7 @@ public class BorrowCart {
         return books;
     }
 
-    public void setStudent(Students student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 

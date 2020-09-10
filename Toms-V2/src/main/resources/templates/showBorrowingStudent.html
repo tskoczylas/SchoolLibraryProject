@@ -20,10 +20,10 @@ borrowingStudets
         <th>Ibns</th>
     </tr>
     </thead>
-    <tr th:each="students:${borrowingStudents}">
-        <td th:text="*{students.author}" td/>
-        <td th:text="*{students.title}" td/>
-        <td th:text="*{students.ibns}" td/>
+    <tr th:each="student:${borrowingStudents}">
+        <td th:text="*{student.author}" td/>
+        <td th:text="*{student.title}" td/>
+        <td th:text="*{student.ibns}" td/>
 
     </tr>
 

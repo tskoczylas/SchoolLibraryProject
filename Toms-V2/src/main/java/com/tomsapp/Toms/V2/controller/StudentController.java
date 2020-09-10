@@ -3,8 +3,7 @@ package com.tomsapp.Toms.V2.controller;
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Role;
 import com.tomsapp.Toms.V2.entity.RoleEnum;
-import com.tomsapp.Toms.V2.security.StudentUser;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.BooksService;
 import com.tomsapp.Toms.V2.service.RoleService;
 import com.tomsapp.Toms.V2.service.StudentService;
@@ -17,14 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
-@RequestMapping("/students")
+@RequestMapping("/student")
 public class StudentController {
 
 StudentService studentService;
@@ -47,7 +43,7 @@ RoleService roleService;
     @PostConstruct
     void createStudent(){
 /*
-  Students students1 = new Students("Feliks",
+  Student students1 = new Student("Feliks",
                 "Aleksi",
                 "admin",
                 "admin",
@@ -55,7 +51,7 @@ RoleService roleService;
                 true);
 
 
-   //     Students students1 = studentService.findbyId(55);
+   //     Student students1 = studentService.findbyId(55);
         Role role = roleService.getById(2);
 
         List<Role> roleList=Collections.singletonList(role);
@@ -80,24 +76,26 @@ RoleService roleService;
     @GetMapping("/showaddform")
         public String showaddform(Model model) {
 
-        Students students = new Students();
-        model.addAttribute("stu",students);
+        Student student = new Student();
+        model.addAttribute("stu", student);
 
 
         return "addStudentForm";
     }
     @PostMapping("/save")
-          public String saveStudents(@Valid @ModelAttribute(value ="stu" ) Students tempStudents, BindingResult bindingResult,Model model
+          public String saveStudents(@Valid @ModelAttribute(value ="stu" ) Student tempStudent, BindingResult bindingResult, Model model
     ){
 
         if(bindingResult.hasErrors()) return "addStudentForm";
-        Role byId = roleService.getById(2);
-        List<Role> roleList=Arrays.asList(byId);
-        tempStudents.setRolesSet(roleList);
-        tempStudents.setPassword(passwordEncoder.encode(tempStudents.getPassword()));
-        tempStudents.setEnabled(true);
 
-        studentService.saveSrudent(tempStudents);
+        Role byId = roleService.getById(2);
+        tempStudent.setPassword(passwordEncoder.encode(tempStudent.getPassword()));
+        tempStudent.setEnabled(true);
+        tempStudent.setRolesSet(Collections.singletonList(byId));
+
+
+        studentService.saveSrudent(tempStudent);
+        System.out.println(tempStudent);
         return "redirect:/students/list";
         }
 
@@ -106,11 +104,11 @@ RoleService roleService;
     public String updateStudent(@RequestParam("studentid") int studentID, Model model)
 
 {
-    Students students = studentService.findbyId(studentID);
+    Student student = studentService.findbyId(studentID);
 
 
 
-    model.addAttribute("stu",students);
+    model.addAttribute("stu", student);
 
     return "addStudentForm";
 }
@@ -127,7 +125,7 @@ RoleService roleService;
 
 @GetMapping("/listOfBoroowingStudents")
     public String listOfBoroowingStudents(@RequestParam("studentId") int id, Model model){
-    Students students = studentService.findbyId(id);
+    Student student = studentService.findbyId(id);
     List<Books> books = booksService.getBooks();
 
         return "showBorrowingStudent";
@@ -137,9 +135,9 @@ RoleService roleService;
 @GetMapping("/findStudent")
     public String findStudent(Model model,@RequestParam("searchStudent") String shearchField)
     {
-        List<Students> studentsByNameorSurname = studentService.findStudentsByNameorSurname(shearchField);
+        List<Student> studentByNameorSurname = studentService.findStudentsByNameorSurname(shearchField);
 
-        model.addAttribute("list",studentsByNameorSurname);
+        model.addAttribute("list", studentByNameorSurname);
 
         return "showStudentForm";
 }

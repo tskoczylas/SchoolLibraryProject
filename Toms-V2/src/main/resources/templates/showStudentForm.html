@@ -7,7 +7,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
     <title>
-        My students project
+        My student project
     </title>
 
     <body>
@@ -15,10 +15,13 @@
 <div class="container p-4 my-4 border " >
 
     <h1> Students table</h1>
-<a  th:href="@{/students/showaddform}" class="btn btn-dark" > add students </a>
+    <a th:href="@{/student/showaddform}" class="btn btn-dark"
+        th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">add student</a>
+
+
     <br>
     <br>
-    <form action="#" th:action="@{/students/findStudent}" >
+    <form action="#" th:action="@{/student/findStudent}" >
         <input type="search" name="searchStudent" placeholder="Search for Students">
 
     <button class="btn btn-dark" type="submit"> Search </button>
@@ -38,14 +41,14 @@
     <tr th:each="studentstemp : ${list}">
         <td th:text="${studentstemp.firstName}"></td>
         <td th:text="${studentstemp.lastName}"></td>
-        <td> <a th:href="@{/students/listOfBoroowingStudents(studentId=${studentstemp.id})}"> Wypoz </a>
+        <td> <a th:href="@{/student/listOfBoroowingStudents(studentId=${studentstemp.id})}"> Wypoz </a>
         ||
             <a th:href="@{/adress/showAdress(studentId=${studentstemp.id})}"> Adress</a>
 
         </td>
-        <td > <a th:href="@{/students/updateform(studentid=${studentstemp.id})}"> Update </a>
+        <td > <a th:href="@{/student/updateform(studentid=${studentstemp.id})}"> Update </a>
             ||
-            <a th:href="@{/students/deleteStudent(studentId=${studentstemp.id})}"> Delete </a>
+            <a th:href="@{/student/deleteStudent(studentId=${studentstemp.id})}"> Delete </a>
 
         </td>
 

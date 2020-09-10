@@ -1,15 +1,9 @@
 package com.tomsapp.Toms.V2.dto;
 
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.entity.Students;
-import org.hibernate.annotations.CreationTimestamp;
+import com.tomsapp.Toms.V2.entity.Student;
 
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
 
 public class BorrowingDto {
 
@@ -22,7 +16,7 @@ public class BorrowingDto {
 
     private String borrowPeriod;
 
-    Students students;
+    Student student;
 
     Books books;
 
@@ -58,12 +52,12 @@ public class BorrowingDto {
         this.borrowPeriod = borrowPeriod;
     }
 
-    public Students getStudents() {
-        return students;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudents(Students students) {
-        this.students = students;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public Books getBooks() {

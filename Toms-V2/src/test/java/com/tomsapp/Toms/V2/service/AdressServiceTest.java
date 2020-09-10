@@ -1,7 +1,7 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Adress;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.AdressRepository;
 import com.tomsapp.Toms.V2.repository.StudentsRepository;
@@ -36,7 +36,7 @@ class AdressServiceTest {
     @Test
         void saveAddressShouldThrownNoSuchUserExemptionWhenStudentIsNotPresent() {
             //given
-        Students tempStudent = new Students();
+        Student tempStudent = new Student();
       Adress tempAddress =
               new Adress(1, "Simple", "Simple", "Simple", null);
 
@@ -53,7 +53,7 @@ class AdressServiceTest {
     @Test
     void saveAdressWhenStudentPresent() {
         //given
-        Students tempStudent = new Students();
+        Student tempStudent = new Student();
         Adress tempAddress =
                 new Adress(1, "Simple", "Simple", "Simple",null);
 
@@ -65,7 +65,7 @@ class AdressServiceTest {
         adressService.save(tempAddress, 1);
         //then
         verify(adressRepository).save(tempAddress);
-        assertThat(tempAddress.getAdressStudents(),equalTo(tempStudent));
+        assertThat(tempAddress.getAdressStudent(),equalTo(tempStudent));
 
 
     }
@@ -82,7 +82,7 @@ class AdressServiceTest {
         StudentsRepository studentsRepository=mock(StudentsRepository.class);
         AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
-        when(adressRepository.findAdressByAdressStudents_Id(1)).
+        when(adressRepository.findAdressByAdressStudent_Id(1)).
                 thenReturn(tempAdress);
         //then
 
@@ -100,7 +100,7 @@ class AdressServiceTest {
         StudentsRepository studentsRepository=mock(StudentsRepository.class);
         AdressService adressService = new AdressService(adressRepository,studentsRepository);
         //when
-        when(adressRepository.findAdressByAdressStudents_Id(1)).
+        when(adressRepository.findAdressByAdressStudent_Id(1)).
                 thenReturn(tempAdress);
         //then
 
@@ -112,7 +112,7 @@ class AdressServiceTest {
     @Test
     void deleteAndFindStudentShouldReturnStudentAndDeleteAdressWhenAddressExistAndStudentProvided() {
         //given
-        Students tempStudent = new Students();
+        Student tempStudent = new Student();
         Optional<Adress> adress = Optional.of(
                 new Adress(1, "Simple", "Simple", "Simple", tempStudent));
         AdressRepository adressRepository = mock(AdressRepository.class);

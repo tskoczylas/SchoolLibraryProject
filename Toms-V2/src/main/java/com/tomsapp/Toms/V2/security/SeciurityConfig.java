@@ -34,13 +34,16 @@ public class SeciurityConfig extends WebSecurityConfigurerAdapter {
 http.authorizeRequests().
         antMatchers("/*").authenticated().
         antMatchers("/students/showaddform").permitAll().
+                and().formLogin().
+                loginPage("/login.html").
+                failureUrl("/login-error.html").
+        and().
+                logout().
+                logoutSuccessUrl("/index.html").
         and().
         antMatcher("/**").authorizeRequests().
         and().
-        formLogin().permitAll().
-        and()
-        .logout()
-        .logoutSuccessUrl("/login");
+        formLogin().permitAll();
 
     }
 

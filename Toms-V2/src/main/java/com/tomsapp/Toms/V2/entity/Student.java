@@ -1,14 +1,11 @@
 package com.tomsapp.Toms.V2.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
-public class Students {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +23,25 @@ public class Students {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
    private List<Role> rolesSet;
 
-    @OneToMany(mappedBy = "adressStudents",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adressStudent",cascade = CascadeType.ALL)
     List<Adress> adresses;
 
-    public Students(int id, String firstName, String lastName) {
+    public Student(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public Students( String firstName, String lastName, String username, String email, String password, boolean isEnabled) {
+    public Student(String firstName, String lastName, String username, String password, boolean isEnabled, List<Role> rolesSet) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.rolesSet = rolesSet;
+    }
+
+    public Student(String firstName, String lastName, String username, String email, String password, boolean isEnabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -45,8 +51,20 @@ public class Students {
 
     }
 
-    public Students() {
+    public Student(String firstName, String lastName, String username, String email, String password, boolean isEnabled, List<Role> rolesSet) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.rolesSet = rolesSet;
     }
+
+    public Student() {
+    }
+
+
 
 
     public int getId() {
@@ -125,8 +143,8 @@ public class Students {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Students students = (Students) o;
-        return id == students.id;
+        Student student = (Student) o;
+        return id == student.id;
     }
 
     @Override
@@ -136,8 +154,16 @@ public class Students {
 
     @Override
     public String toString() {
-        return
-                firstName + " " +
-                lastName;
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", isEnabled=" + isEnabled +
+                ", rolesSet=" + rolesSet +
+                ", adresses=" + adresses +
+                '}';
     }
 }

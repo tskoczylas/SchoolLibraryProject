@@ -1,7 +1,7 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Adress;
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.AdressRepository;
 import com.tomsapp.Toms.V2.repository.StudentsRepository;
@@ -36,10 +36,10 @@ public class AdressService implements AdressServiceInt {
     @Override
     public void save(Adress adress, int studentID) {
 
-        Optional<Students> optionalStudents = studentsRepository.findById(studentID);
+        Optional<Student> optionalStudents = studentsRepository.findById(studentID);
 
         optionalStudents.ifPresent(student ->{
-            adress.setAdressStudents(student);
+            adress.setAdressStudent(student);
             adressRepository.save(adress);
         });
 
@@ -54,21 +54,21 @@ public class AdressService implements AdressServiceInt {
     public List<Adress> findAdressByStudentId(int studentId) {
         Optional<List<Adress>> findAdressByStudentId =
                 adressRepository.
-                        findAdressByAdressStudents_Id(studentId);
+                        findAdressByAdressStudent_Id(studentId);
         return findAdressByStudentId.orElse(Collections.emptyList());
 
 
     }
 
     @Override
-    public Students deleteAndFindStudent(int adressId) {
+    public Student deleteAndFindStudent(int adressId) {
         Optional<Adress> adressOptional = adressRepository.findById(adressId);
         if(adressOptional.isPresent()
                 &&adressOptional.
-                map(Adress::getAdressStudents).
+                map(Adress::getAdressStudent).
                 isPresent()){
              adressRepository.deleteById(adressId);
-            return adressOptional.map(Adress::getAdressStudents).get();
+            return adressOptional.map(Adress::getAdressStudent).get();
         }
         else throw new NoSuchUserExeptions();
 

@@ -1,9 +1,7 @@
 package com.tomsapp.Toms.V2.controller;
 
 import com.tomsapp.Toms.V2.dto.BorrowCart;
-import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Borrowing;
-import com.tomsapp.Toms.V2.entity.Students;
 import com.tomsapp.Toms.V2.service.BooksServiceInt;
 import com.tomsapp.Toms.V2.service.BorrowingServiceInt;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
@@ -14,10 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/borrowing")
