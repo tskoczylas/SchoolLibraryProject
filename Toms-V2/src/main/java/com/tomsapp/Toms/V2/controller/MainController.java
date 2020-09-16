@@ -3,6 +3,8 @@ package com.tomsapp.Toms.V2.controller;
 
 import com.tomsapp.Toms.V2.entity.Borrowing;
 
+import com.tomsapp.Toms.V2.entity.Student;
+import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,21 +20,18 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
 
+    StudentServiceInt studentServiceInt;
 
-
-
+    public MainController(StudentServiceInt studentServiceInt) {
+        this.studentServiceInt = studentServiceInt;
+    }
 
     @GetMapping("/")
     public String demoController(Model model){
 
-        model.addAttribute("time",new java.util.Date());
+        Student logStudent = studentServiceInt.getUserStudent();
 
-        Map<Period,Borrowing>  periods = new HashMap<>();
-        List<Map.Entry<Period, Borrowing>> collect =
-                periods.entrySet().stream().filter(s -> s.getKey().isNegative()).collect(Collectors.toList());
-
-
-        model.addAttribute("return",collect);
+        model.addAttribute("logStudent",logStudent);
         return "start";
     }
 

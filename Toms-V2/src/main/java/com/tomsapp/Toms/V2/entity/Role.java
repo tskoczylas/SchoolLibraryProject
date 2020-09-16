@@ -22,10 +22,10 @@ public class Role {
     }
 
     @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(name = "students_role",
+   /* @JoinTable(name = "students_role",
             joinColumns =@JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn( name = "student_id")
-    )
+    )*/
     List<Student> students;
 
     public Role() {

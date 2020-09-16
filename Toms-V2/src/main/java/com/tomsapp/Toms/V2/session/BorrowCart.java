@@ -1,18 +1,25 @@
-package com.tomsapp.Toms.V2.dto;
+package com.tomsapp.Toms.V2.session;
 
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Borrowing;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @SessionScope
@@ -30,20 +37,26 @@ public class BorrowCart {
     private BorrowingServiceInt borrowingServiceInt;
 
     private Student student;
-    private Books books;
+    private List<Books> books;
     @NotNull
     @Min(1)
     @Max(31)
     private int borrowDays;
 
+
     public BorrowCart() {
 
     }
-
+@PostConstruct
+void createBooksList(){
+        books=new ArrayList<>();
+}
 
 
   public void AddBookToBorrowList(int bookId) {
-        this.books=  booksServiceInt.getbooById(bookId);
+      Books tempBook = booksServiceInt.getbooById(bookId);
+      this.books.add(tempBook);
+
     }
 
   public void AddStudentToBoorowList(int studentId) {
@@ -59,7 +72,7 @@ public class BorrowCart {
     }
 
     public void saveToBorrowing(){
-
+/*
         Borrowing borrowing = new Borrowing();
         borrowing.setStudent(student);
         borrowing.setBooks(books);
@@ -70,7 +83,7 @@ public class BorrowCart {
 
 
         borrowingServiceInt.save(borrowing);
-
+*/
     }
 
 
@@ -86,15 +99,21 @@ public class BorrowCart {
         return student;
     }
 
-    public Books getBooks() {
-        return books;
+    public void removeBookFromCard(String removeCartBookId) {
+        Books bookToRemoveById = booksServiceInt.
+                getbooById(Integer.parseInt(removeCartBookId));
+        this.books.remove(bookToRemoveById);
     }
 
     public void setStudent(Student student) {
         this.student = student;
     }
 
-    public void setBooks(Books books) {
+    public List<Books> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Books> books) {
         this.books = books;
     }
 
@@ -106,4 +125,6 @@ public class BorrowCart {
                 ", borrowDays=" + borrowDays +
                 '}';
     }
+
+
 }

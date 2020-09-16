@@ -17,4 +17,6 @@ public interface StudentServiceInt {
     List<Student> findStudentsByNameorSurname(String shearchField);
 
     public Student findStudentByEmailorUsername(String emailOrUsername);
+
+    Student getUserStudent();
 }

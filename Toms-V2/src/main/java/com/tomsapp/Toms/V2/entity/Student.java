@@ -18,13 +18,13 @@ public class Student {
     private  boolean isEnabled;
 
     @ManyToMany (fetch = FetchType.EAGER)
-    @JoinTable(name = "students_role",
+  /*  @JoinTable(name = "students_role",
             joinColumns =@JoinColumn(name= "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id")) */
    private List<Role> rolesSet;
 
-    @OneToMany(mappedBy = "adressStudent",cascade = CascadeType.ALL)
-    List<Adress> adresses;
+    @OneToOne(mappedBy = "adressStudent",cascade = CascadeType.ALL)
+   private Adress adresses;
 
     public Student(int id, String firstName, String lastName) {
         this.id = id;
@@ -131,11 +131,11 @@ public class Student {
         this.rolesSet = rolesSet;
     }
 
-    public List<Adress> getAdresses() {
+    public Adress getAdresses() {
         return adresses;
     }
 
-    public void setAdresses(List<Adress> adresses) {
+    public void setAdresses(Adress adresses) {
         this.adresses = adresses;
     }
 

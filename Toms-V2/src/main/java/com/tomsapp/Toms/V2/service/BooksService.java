@@ -2,8 +2,13 @@ package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.repository.BooksRepository;
+import com.tomsapp.Toms.V2.session.PageSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,9 +17,14 @@ import java.util.stream.Collectors;
 @Service
 public class BooksService implements BooksServiceInt {
 
-    @Autowired
-    BooksRepository booksRepository;
 
+    BooksRepository booksRepository;
+    PageSession pageSession;
+
+    public BooksService(BooksRepository booksRepository, PageSession pageSession) {
+        this.booksRepository = booksRepository;
+        this.pageSession = pageSession;
+    }
 
     @Override
     public List<Books> getBooks() {
@@ -47,9 +57,29 @@ public class BooksService implements BooksServiceInt {
                 collect(Collectors.toList());
     }
 
+    @Override
+    public void saveBooksList(List<Books> booksList) {
+        booksRepository.saveAll(booksList);
+    }
+
+    @Override
+    public Page<Books> findOrProvideList(int size) {
+        Pageable dividePage =
+                PageRequest.of(Integer.parseInt(pageSession.getCurrentPage()), size);
+
+       if(pageSession.getKeyword()==null) return booksRepository.findAll(dividePage);
+     else return booksRepository.findIt(pageSession.getKeyword(),dividePage);
+
+    }
+
+
+
+
+
+
 
     @Override
     public List<Books> searchByTitleorAutorOrIbns(String searchField) {
-        return booksRepository.findByAuthorContains(searchField);
+        return null;
     }
 }

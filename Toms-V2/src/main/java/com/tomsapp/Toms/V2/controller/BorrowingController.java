@@ -1,6 +1,6 @@
 package com.tomsapp.Toms.V2.controller;
 
-import com.tomsapp.Toms.V2.dto.BorrowCart;
+import com.tomsapp.Toms.V2.session.BorrowCart;
 import com.tomsapp.Toms.V2.entity.Borrowing;
 import com.tomsapp.Toms.V2.service.BooksServiceInt;
 import com.tomsapp.Toms.V2.service.BorrowingServiceInt;

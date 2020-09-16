@@ -94,5 +94,22 @@ public class StudentService implements StudentServiceInt {
         return studentsRepository.findStudentsByEmail(emailOrUsername);
     }
 
+    @Override
+    public Student getUserStudent() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> listOfAuthorities = authentication.
+                getAuthorities().
+                stream().map(GrantedAuthority::getAuthority).
+                collect(Collectors.toList());
+
+
+        if(authentication.isAuthenticated()&&listOfAuthorities.contains(RoleEnum.ROLE_USER.name())){
+            StudentUser principal = (StudentUser) authentication.getPrincipal();
+            Student tempStudent = principal.getStudent();
+            return tempStudent;}
+
+        return null;
+    }
+
 
 }

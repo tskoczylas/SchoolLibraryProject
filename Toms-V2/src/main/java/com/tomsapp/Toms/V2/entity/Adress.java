@@ -11,11 +11,17 @@ import javax.validation.constraints.Size;
 public class Adress {
     @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
+
     @NonNull
     @NotBlank
     @Size(min = 5, max = 15)
-    private String street;
+    private String addressFirstLine;
+
+    @NonNull
+    @NotBlank
+    @Size(min = 5, max = 15)
+    private String addressSecondLine;
 
     @NonNull
     @NotBlank
@@ -25,16 +31,17 @@ public class Adress {
     @NonNull
     @NotBlank
     @Size(min = 5, max = 15)
-    private String coutry;
-    @ManyToOne()
+    private String country;
+
+    @NonNull
+    @NotBlank
+    @Size(min = 5, max = 15)
+    private String telephone;
+
+    @OneToOne
     Student adressStudent;
 
-    public Adress(int id, @NonNull @NotBlank @Size(min = 5, max = 15) String street, @NonNull @NotBlank @Size(min = 5, max = 15) String postCode, @NonNull @NotBlank @Size(min = 5, max = 15) String coutry, Student adressStudent) {
-        this.id = id;
-        this.street = street;
-        this.postCode = postCode;
-        this.coutry = coutry;
-        this.adressStudent = adressStudent;
+    public Adress() {
     }
 
     public int getId() {
@@ -45,32 +52,49 @@ public class Adress {
         this.id = id;
     }
 
-    public Adress() {
+    @NonNull
+    public String getAddressFirstLine() {
+        return addressFirstLine;
     }
 
-
-    public String getStreet() {
-        return street;
+    public void setAddressFirstLine(@NonNull String addressFirstLine) {
+        this.addressFirstLine = addressFirstLine;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    @NonNull
+    public String getAddressSecondLine() {
+        return addressSecondLine;
     }
 
+    public void setAddressSecondLine(@NonNull String addressSecondLine) {
+        this.addressSecondLine = addressSecondLine;
+    }
+
+    @NonNull
     public String getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(String postCode) {
+    public void setPostCode(@NonNull String postCode) {
         this.postCode = postCode;
     }
 
-    public String getCoutry() {
-        return coutry;
+    @NonNull
+    public String getCountry() {
+        return country;
     }
 
-    public void setCoutry(String coutry) {
-        this.coutry = coutry;
+    public void setCountry(@NonNull String country) {
+        this.country = country;
+    }
+
+    @NonNull
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(@NonNull String telephone) {
+        this.telephone = telephone;
     }
 
     public Student getAdressStudent() {

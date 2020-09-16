@@ -1,4 +1,5 @@
-<html xmlns:th="https://www.thymeleaf.org" >
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -8,12 +9,24 @@
 <body>
 <div class="container">
 
-    <h1> Witaj na mojej  stronie testowej </h1>
-<br><br>
+    <h1> Welcome on student's library trial site </h1>
+
+    <h4>Log user:</h4>
+    <a th:text="${logStudent.firstName}"> </a>
+    <a th:text="${logStudent.lastName}"> </a>
+<a   th:href="@{/student/list}"> Edit Student </a>
+
+
+
+    <br><br>
     <a class="btn btn-primary"  th:href="@{/logout}">Log Out</a>
     <br><br>
+<div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
 
-<a class="btn btn-light" th:href="@{/student/list}"> Lista studentów </a>
+    <a  class="btn btn-light"
+    th:href="@{/student/list}"> Student's list </a>
+</div>
+
     <br><br><br>
 
     <a class="btn btn-light" th:href="@{/books/showbooks}"> Lista ksiazek </a>
@@ -48,9 +61,6 @@
     </table>
 
 
-
-    Atualny czas:
-<p th:text =" ${time} " > </p>
 
 </div>
 </body>

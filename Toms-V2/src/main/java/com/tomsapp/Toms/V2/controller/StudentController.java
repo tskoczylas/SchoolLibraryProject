@@ -1,8 +1,9 @@
 package com.tomsapp.Toms.V2.controller;
 
+import com.tomsapp.Toms.V2.dto.AddressDto;
+import com.tomsapp.Toms.V2.dto.StudentDto;
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Role;
-import com.tomsapp.Toms.V2.entity.RoleEnum;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.BooksService;
 import com.tomsapp.Toms.V2.service.RoleService;
@@ -76,26 +77,30 @@ RoleService roleService;
     @GetMapping("/showaddform")
         public String showaddform(Model model) {
 
-        Student student = new Student();
-        model.addAttribute("stu", student);
+        StudentDto createStudentDto = new StudentDto();
+        AddressDto createAddressDto = new AddressDto();
 
+        model.addAttribute("createStudent", createStudentDto);
+        model.addAttribute("createAddress", createAddressDto);
 
         return "addStudentForm";
     }
     @PostMapping("/save")
-          public String saveStudents(@Valid @ModelAttribute(value ="stu" ) Student tempStudent, BindingResult bindingResult, Model model
+          public String saveStudents( @ModelAttribute(value ="createStudent" ) StudentDto studentDto,
+
+                                    @ModelAttribute("createAddressDto") AddressDto addressDto,
+
+                                     Model model
     ){
+      //  System.out.println(studentbindingResult);
+       // System.out.println(addressbindingResult);
 
-        if(bindingResult.hasErrors()) return "addStudentForm";
+        System.out.println(addressDto);
+        System.out.println(studentDto);
 
-        Role byId = roleService.getById(2);
-        tempStudent.setPassword(passwordEncoder.encode(tempStudent.getPassword()));
-        tempStudent.setEnabled(true);
-        tempStudent.setRolesSet(Collections.singletonList(byId));
+     //   if(studentbindingResult.hasErrors()) return "addStudentForm";
+//
 
-
-        studentService.saveSrudent(tempStudent);
-        System.out.println(tempStudent);
         return "redirect:/students/list";
         }
 
