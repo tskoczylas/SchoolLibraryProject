@@ -1,5 +1,6 @@
 package com.tomsapp.Toms.V2.controller;
 
+import com.tomsapp.Toms.V2.enums.SelectEnum;
 import com.tomsapp.Toms.V2.session.BorrowCart;
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Student;
@@ -7,10 +8,13 @@ import com.tomsapp.Toms.V2.service.BooksServiceInt;
 import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.session.PageSession;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,23 +41,28 @@ public class BookController {
 
     @GetMapping("/showbooks")
     public String showBooks(Model model,
+                            @ModelAttribute("dropCartEnum") String dropCartEnum  ,
                             @RequestParam(value = "pageNumber",required = false) String currentPage,
                             @RequestParam(value = "keywords",required = false) String keyword,
-                            @RequestParam(value = "maxPerPage",defaultValue = "20") String maxBooksPerPage)
+                            @RequestParam(value = "maxPerPage",defaultValue = "20") String maxBooksPerPage,
+                            @RequestParam(value = "testOrder",required = false) String ss)
     {
 
         pageSession.setCurrentPageAndKeyword(currentPage,keyword);
 
+
         if (keyword!=null) pageSession.refreshPage();
 
         Page<Books> orProvideList = booksService.
-                findOrProvideList(Integer.parseInt(maxBooksPerPage));
+                findOrProvideList(Integer.parseInt(maxBooksPerPage),dropCartEnum);
 
 
         model.addAttribute("booksList",orProvideList.get().collect(Collectors.toList()));
         model.addAttribute("currentPage",Integer.parseInt(pageSession.getCurrentPage()));
         model.addAttribute("lastPage", orProvideList.getTotalPages()-1);
         model.addAttribute("cartBooks", borrowCart.getBooks());
+        model.addAttribute("dropCartEnum", new ArrayList<>(Arrays.asList(SelectEnum.values())));
+        model.addAttribute("currentSelectDropList",pageSession.getSelectEnum());
 
 
             return "books-media-gird-view-v1";

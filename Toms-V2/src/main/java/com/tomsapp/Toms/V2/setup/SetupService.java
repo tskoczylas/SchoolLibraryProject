@@ -73,7 +73,6 @@ public class SetupService {
 
     public void CreateAdmin() {
 
-
         List<Role> roleEnums = Collections.singletonList(new Role(1, RoleEnum.ROLE_ADMIN));
         Student adminStudent = new Student(
                 "Admin",
@@ -89,9 +88,7 @@ public class SetupService {
 
     }
 
-
     public void CreateUser() {
-
 
         List<Role> roleEnums = Collections.singletonList(new Role(2, RoleEnum.ROLE_USER));
         Student adminStudent = new Student(

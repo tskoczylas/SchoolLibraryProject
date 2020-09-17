@@ -1,15 +1,16 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Books;
+import com.tomsapp.Toms.V2.enums.SelectEnum;
 import com.tomsapp.Toms.V2.repository.BooksRepository;
 import com.tomsapp.Toms.V2.session.PageSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,9 +64,14 @@ public class BooksService implements BooksServiceInt {
     }
 
     @Override
-    public Page<Books> findOrProvideList(int size) {
+    public Page<Books> findOrProvideList(int size, String dropCartEnum) {
+
+        if(Arrays.stream(SelectEnum.values()).anyMatch((t) -> t.name().equals(dropCartEnum)))
+        { pageSession.sortBy(dropCartEnum); }
+
+
         Pageable dividePage =
-                PageRequest.of(Integer.parseInt(pageSession.getCurrentPage()), size);
+                PageRequest.of(Integer.parseInt(pageSession.getCurrentPage()), size,pageSession.getSort());
 
        if(pageSession.getKeyword()==null) return booksRepository.findAll(dividePage);
      else return booksRepository.findIt(pageSession.getKeyword(),dividePage);

@@ -21,11 +21,9 @@ public class Role {
         this.role = role;
     }
 
-    @ManyToMany (fetch = FetchType.EAGER)
-   /* @JoinTable(name = "students_role",
-            joinColumns =@JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn( name = "student_id")
-    )*/
+    @ManyToMany (
+            targetEntity = Student.class,
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     List<Student> students;
 
     public Role() {

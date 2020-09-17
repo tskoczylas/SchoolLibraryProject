@@ -30,7 +30,7 @@ public class Books {
     String status;
     String authors;
     String categories;
-    int totalNumber;
+    Integer totalNumber;
 
     public Books() {
     }
@@ -123,7 +123,7 @@ public class Books {
         this.categories = categories;
     }
 
-    public int getTotalNumber() {
+    public Integer getTotalNumber() {
         return totalNumber;
     }
 

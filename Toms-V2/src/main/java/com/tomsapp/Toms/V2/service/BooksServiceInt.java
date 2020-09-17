@@ -20,5 +20,5 @@ public interface BooksServiceInt {
 
     void saveBooksList(List<Books> booksList);
 
-    Page<Books> findOrProvideList(int size);
+    Page<Books> findOrProvideList(int size, String dropCartEnum);
 }

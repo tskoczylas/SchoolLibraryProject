@@ -17,10 +17,9 @@ public class Student {
     private  String password;
     private  boolean isEnabled;
 
-    @ManyToMany (fetch = FetchType.EAGER)
-  /*  @JoinTable(name = "students_role",
-            joinColumns =@JoinColumn(name= "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")) */
+    @ManyToMany (targetEntity = Role.class,
+            fetch = FetchType.EAGER,cascade = CascadeType.ALL,
+            mappedBy = "students")
    private List<Role> rolesSet;
 
     @OneToOne(mappedBy = "adressStudent",cascade = CascadeType.ALL)
