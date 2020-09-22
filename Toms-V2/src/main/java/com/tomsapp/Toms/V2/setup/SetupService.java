@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomsapp.Toms.V2.entity.*;
+import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.mapper.BookJsonToBookMaper;
 import com.tomsapp.Toms.V2.service.BooksService;
-import com.tomsapp.Toms.V2.service.RoleService;
 import com.tomsapp.Toms.V2.service.StudentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,14 +24,12 @@ import java.util.stream.Collectors;
 public class SetupService {
     private StudentService studentService;
     private PasswordEncoder passwordEncoder;
-    private RoleService roleService;
     private BooksService booksService;
     private BookJsonToBookMaper bookJsonToBookMaper;
 
-    public SetupService(StudentService studentService, PasswordEncoder passwordEncoder, RoleService roleService, BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
+    public SetupService(StudentService studentService, PasswordEncoder passwordEncoder,  BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
         this.studentService = studentService;
         this.passwordEncoder = passwordEncoder;
-        this.roleService = roleService;
         this.booksService = booksService;
         this.bookJsonToBookMaper = bookJsonToBookMaper;
     }
@@ -43,14 +41,7 @@ public class SetupService {
     private String adminPassword;
 
 
-    @PostConstruct
-    public void createRoles() {
-        Role roleUser = new Role(RoleEnum.ROLE_USER);
-        Role roleAdmin = new Role(RoleEnum.ROLE_ADMIN);
-        roleService.saveRole(roleAdmin);
-        roleService.saveRole(roleUser);
 
-    }
     @PostConstruct
     @JsonIgnore
     @JsonProperty(value = "publishedDate")
@@ -70,37 +61,33 @@ public class SetupService {
 
         booksService.saveBooksList(booksList);
     }
-
+    @PostConstruct
     public void CreateAdmin() {
 
-        List<Role> roleEnums = Collections.singletonList(new Role(1, RoleEnum.ROLE_ADMIN));
-        Student adminStudent = new Student(
-                "Admin",
-                "Admin",
-                this.adminLogin,
-                this.adminLogin,
-                passwordEncoder.encode(this.adminPassword),
-                true,
-                roleEnums);
+        Student adminStudent = new Student();
+        adminStudent.setEnabled(true);
+        adminStudent.setEmail("admin");
+        adminStudent.setFirstName("AdminTomasz");
+        adminStudent.setLastName("AdminSkoczylas");
+        adminStudent.setPassword(passwordEncoder.encode("admin"));
+        adminStudent.setRole(Role.ROLE_ADMIN);
 
         studentService.saveSrudent(adminStudent);
 
 
     }
-
+    @PostConstruct
     public void CreateUser() {
 
-        List<Role> roleEnums = Collections.singletonList(new Role(2, RoleEnum.ROLE_USER));
-        Student adminStudent = new Student(
-                "User",
-                "User",
-                "User",
-                "User",
-                passwordEncoder.encode("user"),
-                true,
-                roleEnums);
+       Student userStudent=new Student();
+        userStudent.setEnabled(true);
+        userStudent.setEmail("email");
+        userStudent.setFirstName("UserTomasz");
+        userStudent.setLastName("UserSkoczylas");
+        userStudent.setPassword(passwordEncoder.encode("user"));
+        userStudent.setRole(Role.ROLE_USER);
 
-        studentService.saveSrudent(adminStudent);
+        studentService.saveSrudent(userStudent);
 
 
     }

@@ -1,5 +1,7 @@
 package com.tomsapp.Toms.V2.entity;
 
+import com.tomsapp.Toms.V2.enums.Role;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -12,59 +14,32 @@ public class Student {
     private int id;
     private String firstName;
     private String lastName;
-    private String username;
     private String email;
     private  String password;
     private  boolean isEnabled;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @ManyToMany (targetEntity = Role.class,
-            fetch = FetchType.EAGER,cascade = CascadeType.ALL,
-            mappedBy = "students")
-   private List<Role> rolesSet;
 
     @OneToOne(mappedBy = "adressStudent",cascade = CascadeType.ALL)
    private Adress adresses;
 
-    public Student(int id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
 
-    public Student(String firstName, String lastName, String username, String password, boolean isEnabled, List<Role> rolesSet) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.isEnabled = isEnabled;
-        this.rolesSet = rolesSet;
-    }
 
-    public Student(String firstName, String lastName, String username, String email, String password, boolean isEnabled) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.isEnabled = isEnabled;
-
-    }
-
-    public Student(String firstName, String lastName, String username, String email, String password, boolean isEnabled, List<Role> rolesSet) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.isEnabled = isEnabled;
-        this.rolesSet = rolesSet;
-    }
 
     public Student() {
     }
 
-
-
+    public Student(int id, String firstName, String lastName, String email, String password, boolean isEnabled, Role role, Adress adresses) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.isEnabled = isEnabled;
+        this.role = role;
+        this.adresses = adresses;
+    }
 
     public int getId() {
         return id;
@@ -90,13 +65,7 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getEmail() {
         return email;
@@ -122,12 +91,12 @@ public class Student {
         isEnabled = enabled;
     }
 
-    public List<Role> getRolesSet() {
-        return rolesSet;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRolesSet(List<Role> rolesSet) {
-        this.rolesSet = rolesSet;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Adress getAdresses() {
@@ -157,11 +126,10 @@ public class Student {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", isEnabled=" + isEnabled +
-                ", rolesSet=" + rolesSet +
+                ", rolesSet="  +
                 ", adresses=" + adresses +
                 '}';
     }

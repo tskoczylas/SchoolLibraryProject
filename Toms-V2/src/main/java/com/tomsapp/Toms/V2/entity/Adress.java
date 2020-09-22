@@ -13,29 +13,19 @@ public class Adress {
      @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
+
     private String addressFirstLine;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
+
     private String addressSecondLine;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
+
     private String postCode;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
+
     private String country;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
+
     private String telephone;
 
     @OneToOne
@@ -52,48 +42,43 @@ public class Adress {
         this.id = id;
     }
 
-    @NonNull
     public String getAddressFirstLine() {
         return addressFirstLine;
     }
 
-    public void setAddressFirstLine(@NonNull String addressFirstLine) {
+    public void setAddressFirstLine(String addressFirstLine) {
         this.addressFirstLine = addressFirstLine;
     }
 
-    @NonNull
     public String getAddressSecondLine() {
         return addressSecondLine;
     }
 
-    public void setAddressSecondLine(@NonNull String addressSecondLine) {
+    public void setAddressSecondLine(String addressSecondLine) {
         this.addressSecondLine = addressSecondLine;
     }
 
-    @NonNull
     public String getPostCode() {
         return postCode;
     }
 
-    public void setPostCode(@NonNull String postCode) {
+    public void setPostCode(String postCode) {
         this.postCode = postCode;
     }
 
-    @NonNull
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(@NonNull String country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    @NonNull
     public String getTelephone() {
         return telephone;
     }
 
-    public void setTelephone(@NonNull String telephone) {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
 
@@ -103,5 +88,18 @@ public class Adress {
 
     public void setAdressStudent(Student adressStudent) {
         this.adressStudent = adressStudent;
+    }
+
+    @Override
+    public String toString() {
+        return "Adress{" +
+                "id=" + id +
+                ", addressFirstLine='" + addressFirstLine + '\'' +
+                ", addressSecondLine='" + addressSecondLine + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", country='" + country + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", adressStudent=" + adressStudent +
+                '}';
     }
 }

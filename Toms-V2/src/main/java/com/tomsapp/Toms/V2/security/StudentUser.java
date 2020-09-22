@@ -6,12 +6,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class StudentUser implements UserDetails {
 
-    private Student student;
+     Student student;
 
     public StudentUser(Student student) {
         this.student = student;
@@ -20,13 +21,7 @@ public class StudentUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        List<SimpleGrantedAuthority> authorities =
-                student.
-                        getRolesSet().
-                        stream().
-                        map(s -> new SimpleGrantedAuthority(s.getRole().name())).
-                        collect(Collectors.toList());
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority(student.getRole().name()));
 
 
 
@@ -65,6 +60,6 @@ public class StudentUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return student.isEnabled();
+        return true;
     }
 }

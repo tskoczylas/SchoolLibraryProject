@@ -29,10 +29,9 @@ public class MainController {
     @GetMapping("/")
     public String demoController(Model model){
 
-        Student logStudent = studentServiceInt.getUserStudent();
 
-        model.addAttribute("logStudent",logStudent);
-        return "start";
+
+        return "redirect:/books/showbooks";
     }
 
 

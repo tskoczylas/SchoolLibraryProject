@@ -7,15 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentsRepository extends JpaRepository<Student, Integer> {
 
 
-    @Query(value = "select * from students where first_name like %:search% or last_name like %:search%" ,nativeQuery = true)
+    @Query(value = "select u from Student u where u.firstName like %:search% or u.lastName like %:search%")
     List<Student> findStudentsByNameorSurname(@Param("search") String searchFied);
-
-    Student findStudentsByEmail(String emailOrUsername);
-
+@Query(value = "select u from Student u where u.email like :key")
+    Optional<Student> findStudentForSecurity(@Param("key") String emailOrUsername);
 
 }

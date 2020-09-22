@@ -32,18 +32,17 @@ public class SeciurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 http.authorizeRequests().
-        antMatchers("/*").authenticated().
-        antMatchers("/students/showaddform").permitAll().
-                and().formLogin().
-                loginPage("/login.html").
-                failureUrl("/login-error.html").
+        antMatchers("/conformation_email").permitAll().
+        antMatchers("/css/**","/1/**","/fonts/**","/images/**","/js/**","/create_account/**").permitAll().
+        anyRequest().authenticated().
+
         and().
-                logout().
-                logoutSuccessUrl("/index.html").
+                formLogin().
+                loginPage("/login.html").permitAll().
+                failureUrl("/login-error.html").permitAll().
+
         and().
-        antMatcher("/**").authorizeRequests().
-        and().
-        formLogin().permitAll();
+                logout().permitAll();
 
     }
 

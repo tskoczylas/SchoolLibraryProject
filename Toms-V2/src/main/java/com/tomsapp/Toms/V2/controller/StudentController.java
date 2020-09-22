@@ -1,22 +1,18 @@
 package com.tomsapp.Toms.V2.controller;
 
 import com.tomsapp.Toms.V2.dto.AddressDto;
-import com.tomsapp.Toms.V2.dto.StudentDto;
+import com.tomsapp.Toms.V2.dto.StudentAddressDto;
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.entity.Role;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.BooksService;
-import com.tomsapp.Toms.V2.service.RoleService;
 import com.tomsapp.Toms.V2.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tomsapp.Toms.V2.session.BorrowCart;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 import java.util.*;
 
 
@@ -27,19 +23,14 @@ public class StudentController {
 StudentService studentService;
 BooksService booksService;
 PasswordEncoder passwordEncoder;
-RoleService roleService;
+BorrowCart borrowCart;
 
-    @Autowired
-    public StudentController(StudentService studentService,
-                             BooksService booksService,
-                             PasswordEncoder passwordEncoder, RoleService roleService) {
+    public StudentController(StudentService studentService, BooksService booksService, PasswordEncoder passwordEncoder, BorrowCart borrowCart) {
         this.studentService = studentService;
         this.booksService = booksService;
-        this.passwordEncoder=passwordEncoder;
-        this.roleService=roleService;
-
+        this.passwordEncoder = passwordEncoder;
+        this.borrowCart = borrowCart;
     }
-
 
     @PostConstruct
     void createStudent(){
@@ -77,16 +68,17 @@ RoleService roleService;
     @GetMapping("/showaddform")
         public String showaddform(Model model) {
 
-        StudentDto createStudentDto = new StudentDto();
+        StudentAddressDto createStudentAddressDto = new StudentAddressDto();
         AddressDto createAddressDto = new AddressDto();
+        model.addAttribute("cartBooks", borrowCart.getBooks());
 
-        model.addAttribute("createStudent", createStudentDto);
+        model.addAttribute("createStudent", createStudentAddressDto);
         model.addAttribute("createAddress", createAddressDto);
 
-        return "addStudentForm";
+        return "sigint";
     }
     @PostMapping("/save")
-          public String saveStudents( @ModelAttribute(value ="createStudent" ) StudentDto studentDto,
+          public String saveStudents( @ModelAttribute(value ="createStudent" ) StudentAddressDto studentAddressDto,
 
                                     @ModelAttribute("createAddressDto") AddressDto addressDto,
 
@@ -96,7 +88,7 @@ RoleService roleService;
        // System.out.println(addressbindingResult);
 
         System.out.println(addressDto);
-        System.out.println(studentDto);
+        System.out.println(studentAddressDto);
 
      //   if(studentbindingResult.hasErrors()) return "addStudentForm";
 //

@@ -70,12 +70,14 @@ public class BookController {
 
 
 
-        @GetMapping("/addToCard")
+        @GetMapping(value = {"/addToCard","//addToCard"})
         public String addToCard(Model model,
                 @RequestParam(value = "bookId",required = false) String bookId,
                                 @RequestParam(value = "removeCartBookId",required = false) String removeCartBookId){
             if (bookId != null) {
                 borrowCart.AddBookToBorrowList(Integer.parseInt(bookId));}
+
+
 
             if (removeCartBookId != null) {
                 borrowCart.removeBookFromCard(removeCartBookId);}
