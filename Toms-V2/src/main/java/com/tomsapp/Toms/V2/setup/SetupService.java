@@ -10,7 +10,6 @@ import com.tomsapp.Toms.V2.mapper.BookJsonToBookMaper;
 import com.tomsapp.Toms.V2.service.BooksService;
 import com.tomsapp.Toms.V2.service.StudentService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
@@ -23,13 +22,12 @@ import java.util.stream.Collectors;
 @Controller
 public class SetupService {
     private StudentService studentService;
-    private PasswordEncoder passwordEncoder;
     private BooksService booksService;
     private BookJsonToBookMaper bookJsonToBookMaper;
 
-    public SetupService(StudentService studentService, PasswordEncoder passwordEncoder,  BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
+    public SetupService(StudentService studentService,  BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
         this.studentService = studentService;
-        this.passwordEncoder = passwordEncoder;
+
         this.booksService = booksService;
         this.bookJsonToBookMaper = bookJsonToBookMaper;
     }
@@ -69,7 +67,7 @@ public class SetupService {
         adminStudent.setEmail("admin");
         adminStudent.setFirstName("AdminTomasz");
         adminStudent.setLastName("AdminSkoczylas");
-        adminStudent.setPassword(passwordEncoder.encode("admin"));
+     //   adminStudent.setPassword(passwordEncoder.encode("admin"));
         adminStudent.setRole(Role.ROLE_ADMIN);
 
         studentService.saveSrudent(adminStudent);
@@ -84,7 +82,7 @@ public class SetupService {
         userStudent.setEmail("email");
         userStudent.setFirstName("UserTomasz");
         userStudent.setLastName("UserSkoczylas");
-        userStudent.setPassword(passwordEncoder.encode("user"));
+      //  userStudent.setPassword(passwordEncoder.encode("user"));
         userStudent.setRole(Role.ROLE_USER);
 
         studentService.saveSrudent(userStudent);

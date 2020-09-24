@@ -7,7 +7,6 @@ import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.service.BooksService;
 import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.session.BorrowCart;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +21,13 @@ public class StudentController {
 
 StudentService studentService;
 BooksService booksService;
-PasswordEncoder passwordEncoder;
+
 BorrowCart borrowCart;
 
-    public StudentController(StudentService studentService, BooksService booksService, PasswordEncoder passwordEncoder, BorrowCart borrowCart) {
+    public StudentController(StudentService studentService, BooksService booksService,  BorrowCart borrowCart) {
         this.studentService = studentService;
         this.booksService = booksService;
-        this.passwordEncoder = passwordEncoder;
+
         this.borrowCart = borrowCart;
     }
 

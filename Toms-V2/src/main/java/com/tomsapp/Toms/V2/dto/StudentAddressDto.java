@@ -181,5 +181,21 @@ public class StudentAddressDto {
         return this.email.equals(this.confirmEmail);
     }
 
-
+    @Override
+    public String toString() {
+        return "StudentAddressDto{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", confirmEmail='" + confirmEmail + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", addressFirstLine='" + addressFirstLine + '\'' +
+                ", addressSecondLine='" + addressSecondLine + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", country='" + country + '\'' +
+                ", telephone='" + telephone + '\'' +
+                '}';
+    }
 }

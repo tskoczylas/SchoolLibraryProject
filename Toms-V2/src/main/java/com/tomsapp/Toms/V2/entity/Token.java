@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -72,5 +73,23 @@ public class Token {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Token token1 = (Token) o;
+        return id == token1.id &&
+                isActive == token1.isActive &&
+                Objects.equals(createDate, token1.createDate) &&
+                Objects.equals(token, token1.token) &&
+                Objects.equals(student, token1.student);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDate, token, isActive, student);
     }
 }

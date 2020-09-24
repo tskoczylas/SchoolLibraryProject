@@ -1,5 +1,6 @@
 package com.tomsapp.Toms.V2.service;
 
+import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Student;
 
 import java.util.List;
@@ -21,7 +22,10 @@ public interface StudentServiceInt {
 
     Student getUserStudent();
 
-    void sendMail(String from);
+
+
 
     Optional<Student> findStudentByEmail(String email);
+
+    void saveStudentUserActivateAndAssignAddress(Student student, Adress adress);
 }

@@ -3,21 +3,15 @@ package com.tomsapp.Toms.V2.controller;
 import com.tomsapp.Toms.V2.dto.StudentAddressDto;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.entity.Token;
-import com.tomsapp.Toms.V2.mapper.StudentAddressMaper;
 import com.tomsapp.Toms.V2.service.LoginService;
-import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
-import com.tomsapp.Toms.V2.session.BorrowCart;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.SocketException;
 import java.util.Optional;
 
 import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.mapToStudentAddressDtoFromToken;
@@ -35,38 +29,41 @@ public class LoginController {
     }
 
 
-    @GetMapping("login.html")
+    @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("emailUser", new StudentAddressDto());
 
-        return "login.html";
+        return "login";
     }
 
 
-    @RequestMapping("/login-error.html")
+    @GetMapping("/login-error")
     public String loginError(Model model) {
         model.addAttribute("loginError", true);
         model.addAttribute("emailUser", new StudentAddressDto());
 
 
-        return "login.html";
+        return "login";
     }
 
 
 
     @PostMapping("/conformation_email")
-    public String sendConformationEmail(@ModelAttribute() StudentAddressDto studentAddressDto, Model model)  {
+    public String sendConformationEmail(@ModelAttribute("emailUser") StudentAddressDto studentAddressDto, Model model)  {
 
         Optional<Student> studentByEmail =
                 studentServiceInt.
                         findStudentByEmail(studentAddressDto.getEmail());
-        if(!studentAddressDto.isEmailMatch()){
-            model.addAttribute("message","This email doesn't match");
-        }
+
+        if(studentAddressDto.getEmail()==null||studentAddressDto.getConfirmEmail()==null)
+        {model.addAttribute("message","There is not email or confirm email");}
+        else if(!studentAddressDto.isEmailMatch()){
+            model.addAttribute("message","This email doesn't match"); }
         else if( studentByEmail.isPresent() ) {
            model.addAttribute("message", "Your email already exist"); }
        else
-       { loginService.createTokenAndSignStudent(studentAddressDto);
+       { loginService.createTokenSignStudentAndSendConfMail(studentAddressDto);
+
         model.addAttribute("message", "Email with registration link has been sent");}
 
        model.addAttribute("emailUser",studentAddressDto);
@@ -81,6 +78,7 @@ public class LoginController {
         Token tokenByToken = loginService.findTokenByToken(token);
 
        if( tokenByToken!=null&&
+               tokenByToken.getStudent()!=null&&
                tokenByToken.isActive()&&
                tokenByToken.getStudent().getId()!=0)
        {
@@ -98,8 +96,11 @@ public class LoginController {
     public String saveAccount(@Valid @ModelAttribute(name = "tokenStudent") StudentAddressDto studentAddressDto, BindingResult bindingResult,
                               Model model){
 
-
-        if(bindingResult.hasErrors()) {
+        if(studentAddressDto==null||studentAddressDto.getEmail()==null)
+        {model.addAttribute("errorTitle","Error");
+            model.addAttribute("errorText","The link has been used or is invalid or broken!");
+            return "error";}
+        else if (bindingResult.hasErrors()) {
             model.addAttribute("tokenStudent", studentAddressDto);
             return "registration";
         }
@@ -114,6 +115,7 @@ public class LoginController {
                     " " + studentAddressDto.getLastName() +
                     " welcome to our library, now you can log in" );
             loginService.saveRegistration(studentAddressDto);
+            loginService.deactivateTokenByStudentId(studentAddressDto.getId());
         return "message";}
     }
 

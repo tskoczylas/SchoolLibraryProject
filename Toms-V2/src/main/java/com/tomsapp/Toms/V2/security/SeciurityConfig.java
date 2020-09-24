@@ -35,11 +35,10 @@ http.authorizeRequests().
         antMatchers("/conformation_email").permitAll().
         antMatchers("/css/**","/1/**","/fonts/**","/images/**","/js/**","/create_account/**").permitAll().
         anyRequest().authenticated().
-
         and().
                 formLogin().
-                loginPage("/login.html").permitAll().
-                failureUrl("/login-error.html").permitAll().
+                loginPage("/login").permitAll().
+                failureUrl("/login-error").permitAll().
 
         and().
                 logout().permitAll();

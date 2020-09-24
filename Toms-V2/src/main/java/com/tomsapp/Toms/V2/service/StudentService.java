@@ -1,15 +1,17 @@
 package com.tomsapp.Toms.V2.service;
 
+import com.tomsapp.Toms.V2.dto.StudentAddressDto;
+import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
 import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import com.tomsapp.Toms.V2.security.StudentUser;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -22,12 +24,9 @@ public class StudentService implements StudentServiceInt {
 
 
     StudentsRepository studentsRepository;
-    private JavaMailSender javaMailSender;
 
-
-    public StudentService(StudentsRepository studentsRepository, JavaMailSender javaMailSender) {
+    public StudentService(StudentsRepository studentsRepository) {
         this.studentsRepository = studentsRepository;
-        this.javaMailSender = javaMailSender;
     }
 
     List<Student> findStudentsByAuthentication(){
@@ -73,6 +72,7 @@ public class StudentService implements StudentServiceInt {
 
     }
 
+
     @Override
     public void deleteStudentbyId(int studentId) {
         studentsRepository.deleteById(studentId);
@@ -107,19 +107,22 @@ public class StudentService implements StudentServiceInt {
 
         return null;
     }
-    @Override
-    public void sendMail(String from){
-
-        SimpleMailMessage simpleMailMessage =new SimpleMailMessage();
-        simpleMailMessage.setFrom("tomsdeveloperlibrary@gmail.com");
-        simpleMailMessage.setText("Conformation mesage  " + from);
-        simpleMailMessage.setTo(from);
-        javaMailSender.send(simpleMailMessage);
-    }
 
     @Override
     public Optional<Student> findStudentByEmail(String email) {
         return studentsRepository.findStudentForSecurity(email);
+    }
+
+    @Override
+    public void saveStudentUserActivateAndAssignAddress(Student student, Adress adress){
+       BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        adress.setAdressStudent(student);
+        student.setRole(Role.ROLE_USER);
+        student.setAdresses(adress);
+        student.setEnabled(true);
+       student.setPassword(passwordEncoder.encode(student.getPassword()));
+        studentsRepository.save(student);
+
     }
 
 

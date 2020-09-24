@@ -10,10 +10,11 @@ import java.util.Optional;
 
 public interface LoginService {
 
-    void createTokenAndSignStudent(StudentAddressDto studentAddressDto);
-    String getHost();
+    void createTokenSignStudentAndSendConfMail(StudentAddressDto studentAddressDto);
 
     Token findTokenByToken(String token);
 
     void saveRegistration(StudentAddressDto studentAddressDto);
+
+    void deactivateTokenByStudentId(int id);
 }

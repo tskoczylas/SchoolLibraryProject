@@ -1,6 +1,7 @@
 package com.tomsapp.Toms.V2.mapper;
 
 import com.tomsapp.Toms.V2.dto.StudentAddressDto;
+import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.entity.Token;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,13 @@ public class StudentAddressMaper {
     public static Student mapToStudentFromStudentAddressDto(StudentAddressDto studentAddressDto){
         Student student = new Student();
         modelMapper = new ModelMapper();
-        modelMapper.map(student,studentAddressDto);
+        modelMapper.map(studentAddressDto,student);
         return student;
+    }
+    public static Adress mapToAddressFromStudentAddressDto(StudentAddressDto studentAddressDto){
+        Adress adress = new Adress();
+        modelMapper = new ModelMapper();
+        modelMapper.map(studentAddressDto,adress);
+        return adress;
     }
 }
