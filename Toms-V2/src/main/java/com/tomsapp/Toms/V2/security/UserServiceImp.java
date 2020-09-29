@@ -1,6 +1,6 @@
 package com.tomsapp.Toms.V2.security;
 
-import com.tomsapp.Toms.V2.service.StudentService;
+import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImp implements UserDetailsService {
 
-   StudentService studentService;
+   StudentServiceInt studentServiceInt;
 
-    public UserServiceImp(StudentService studentService) {
-        this.studentService = studentService;
+    public UserServiceImp(StudentServiceInt studentServiceInt) {
+        this.studentServiceInt = studentServiceInt;
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return new StudentUser(studentService.findStudentByEmailorUsername(s));
+        return new StudentUser(studentServiceInt.findStudentByEmailorUsername(s));
     }
 }

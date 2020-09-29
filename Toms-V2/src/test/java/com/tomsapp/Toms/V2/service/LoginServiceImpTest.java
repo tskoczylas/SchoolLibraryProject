@@ -21,13 +21,13 @@ class LoginServiceImpTest {
  private    TokenRepository tokenRepository;
    private EmailService emailService;
   private   LoginServiceImp loginServiceImp;
-private StudentServiceInt studentService;
+private StudentService studentService;
 
     @BeforeEach
     void createMocks(){
          tokenRepository = mock(TokenRepository.class);
         emailService=mock(EmailService.class);
-         studentService=mock(StudentService.class);
+         studentService=mock(StudentServiceInt.class);
 
         loginServiceImp =
              new LoginServiceImp(tokenRepository,emailService,studentService);
@@ -38,7 +38,7 @@ private StudentServiceInt studentService;
         //given
         StudentAddressDto studentAddressDtoTemp = new StudentAddressDto();
         studentAddressDtoTemp.setEmail("sample@gmail.com");
-        studentAddressDtoTemp.setId(2);
+        studentAddressDtoTemp.setStudentId(2);
 
         //when
         loginServiceImp.createTokenSignStudentAndSendConfMail(studentAddressDtoTemp);
@@ -53,8 +53,8 @@ private StudentServiceInt studentService;
         assertEquals(argumentCaptorToken.getValue().getStudent(),argumentCaptorStudent.getValue());
         assertThat(argumentCaptorStudent.getValue().getEmail(),is(equalTo(studentAddressDtoTemp.getEmail())));
         assertThat(argumentCaptorToken.getValue().getStudent().getEmail(),is(equalTo(studentAddressDtoTemp.getEmail())));
-        assertThat(argumentCaptorStudent.getValue().getId(),is(equalTo(studentAddressDtoTemp.getId())));
-        assertThat(argumentCaptorToken.getValue().getStudent().getId(),is(equalTo(studentAddressDtoTemp.getId())));
+        assertThat(argumentCaptorStudent.getValue().getId(),is(equalTo(studentAddressDtoTemp.getStudentId())));
+        assertThat(argumentCaptorToken.getValue().getStudent().getId(),is(equalTo(studentAddressDtoTemp.getStudentId())));
         assertThat(argumentCaptorToken.getValue().isActive(),is(equalTo(true)));
         assertThat(argumentCaptorToken.getValue().getToken(),is(not(emptyString())));
 
@@ -85,7 +85,7 @@ private StudentServiceInt studentService;
     void saveRegistrationShouldMapAdressDtoDtoToAddressAndStudentAndSetAdressIdTo0AndSendTosaveStudentUserActivateAndAssignAddress() {
        //given
         StudentAddressDto studentAddressDto = new StudentAddressDto();
-        studentAddressDto.setId(22);
+        studentAddressDto.setStudentId(22);
         studentAddressDto.setEmail("email");
         studentAddressDto.setAddressFirstLine("address");
         loginServiceImp.saveRegistration(studentAddressDto);

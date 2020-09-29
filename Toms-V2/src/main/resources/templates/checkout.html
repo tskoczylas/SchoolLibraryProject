@@ -53,7 +53,7 @@
                             <div class="navbar-brand">
                                 <h1>
                                     <a href="index-2.html">
-                                        <img src="images/libraria-logo-v1.png" alt="LIBRARIA" />
+                                        <img th:src="@{/images/libraria-logo-v1.png}" alt="LIBRARIA"  />
                                     </a>
                                 </h1>
                             </div>
@@ -71,7 +71,42 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
+                                    <div  class="topbar-links">
 
+                                        <a sec:authorize="isAuthenticated()" sec:authentication="name"   href="//login.html"><i class="fa fa-lock"></i>Login / Register</a>
+                                        <a sec:authorize="hasRole('ROLE_ANONYMOUS')"   th:href="@{/login}"><i class="fa fa-lock"></i>Login / Register</a>
+
+                                        <span>|</span>
+                                        <div class="header-cart dropdown">
+                                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                                <i class="fa fa-shopping-cart"></i>
+                                                <small th:text="${cartBooks.size()}">0</small>
+                                            </a>
+                                            <div class="dropdown-menu cart-dropdown">
+                                                <ul>
+                                                    <li class="clearfix" th:each="eachCartBook:${cartBooks}">
+                                                        <img th:src="${eachCartBook.thumbnailUrl}" alt="cart item" />
+                                                        <div class="item-info">
+                                                            <div class="name">
+                                                                <a href="#"><p th:text="${eachCartBook.title}"></p></a>
+                                                            </div>
+                                                            <div class="author"><strong>Author:</strong> <p th:text="${eachCartBook.authors}"></p></div>
+                                                        </div>
+                                                        <a class="remove" th:href="@{/checkout/(bookId=${eachCartBook.id})}"><i class="fa fa-trash-o"></i></a>
+                                                    </li>
+
+                                                </ul>
+                                                <div class="cart-total">
+                                                    <div class="title">SubTotal</div>
+                                                    <div class="price"><p th:text="${cartBooks.size()}"></p></div>
+                                                </div>
+                                                <div class="cart-buttons">
+                                                    <a href="cart.html" class="btn btn-dark-gray">View Cart</a>
+                                                    <a href="checkout.html" class="btn btn-primary">Checkout</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +197,7 @@
                                 <ul>
                                     <li><a href="cart.html">Cart</a></li>
                                     <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a th:href="@{/login.html}">Signin/Register</a></li>
+                                    <li><a href="login.html">Signin/Register</a></li>
                                     <li><a href="404.html">404/Error</a></li>
                                 </ul>
                             </li>
@@ -184,50 +219,204 @@
 </header>
 <!-- End: Header Section -->
 
+
+
 <!-- Start: Page Banner -->
 <section class="page-banner services-banner">
     <div class="container">
         <div class="banner-header">
-            <h2 th:if="${messageTitle}" th:text="${messageTitle}">Signin</h2>
+            <h2 >Shearch and add book to borrow</h2>
             <span class="underline center"></span>
+            <p class="lead">Welcome</p>
         </div>
         <div class="breadcrumb">
             <ul>
                 <li><a href="index-2.html">Home</a></li>
-                <li th:if="${messageTitle}" th:text="${messageTitle}" >Signin</li>
+
+                <li>Books & Media</li>
             </ul>
         </div>
+
     </div>
 </section>
 <!-- End: Page Banner -->
 
-<!-- Start: Cart Section -->
+<!-- Start: Cart Checkout Section -->
 <div id="content" class="site-content">
     <div id="primary" class="content-area">
         <main id="main" class="site-main">
-            <div class="signin-main">
+            <div class="checkout-main">
                 <div class="container">
-                    <div class="woocommerce">
-                        <div class="woocommerce-login">
-                            <div class="company-info signin-register">
+                    <div class="row">
+                        <div class="cart-head">
+                            <div class="col-xs-12 col-sm-6 account-option">
+                                <strong th:text="${logInStudent.firstName} +' '+ ${logInStudent.lastName}">Scott Fitzgerald</strong>
+                                <ul>
+                                    <li><a href="#">Edit Account</a></li>
+                                    <li class="divider">|</li>
+                                </ul>
 
-                                <div class="col-md-offset-3 border-dark new-user">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="company-detail new-account bg-light margin-list">
-
-
-                                                    <p class="form-row form-row-first input-required">
-                                                        <label>
-                                                           <h3> <span th:if="${messageText}"  th:text="${messageText}" class="first-letter">messageText</span></h3>
-
-                                                        </label>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                            <div class="col-xs-12 col-sm-6 library-info">
+                                <ul>
+                                    <li>
+                                        <strong>Tom's Library:</strong>
+                                        Students It Library
+                                    </li>
+                                    <li>
+                                        <strong>Email:</strong>
+                                        <a th:text="${logInStudent.email}" th:href="${logInStudent.email}"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <article class="page type-page status-publish hentry">
+                                <div class="entry-content">
+                                    <div class="woocommerce">
+
+
+
+
+                                                <div class="col-sm-4">
+                                                    <h2>Your cart</h2>
+                                                    <span class="underline left"></span>
+                                                    <div class="woocommerce-checkout-review-order" id="order_review">
+                                                        <table class="shop_table woocommerce-checkout-review-order-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th class="product-name">Product</th>
+                                                                <th class="product-total">Action</th>
+
+
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody th:each="cart: ${cartBooks}">
+                                                            <tr class="cart_item">
+                                                                <td class="product-name">
+                                                                    <span th:text="*{cart.title}" class="woocommerce-product-amount">The Great Gatsby</span>
+                                                                </td>
+
+                                                                <td class="product-total">
+                                                                    <a th:href="@{/checkout/(bookId=${cart.id})}"> remove </a>
+                                                                </td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                            <tfoot>
+                                                            <tr class="cart-subtotal">
+                                                                <td>Cost per day</td>
+                                                                <td th:text="${daysEnum.costPerDays} + ' £'"></td>
+
+                                                            </tr>
+
+                                                            <tr class="cart-shipping">
+                                                                <td>Shipping</td>
+                                                                <td><strong class="shipping-amount">Free</strong></td>
+                                                            </tr>
+                                                            <tr class="order-total">
+                                                                <th>Total cost</th>
+                                                                <th th:text="${#numbers.formatDecimal(daysEnum.totalCost, 1, 2, 'COMMA') + ' £' }"> </th>
+                                                            </tr>
+                                                            <tr class="order-total">
+                                                                <th>Order Totals Days</th>
+                                                                <th th:text="${daysEnum.days}">/th>
+                                                            </tr>
+                                                            </tfoot>
+                                                        </table>
+
+
+                                                   <h4> <a class="cart-buttons" th:href="@{/checkout/(borrowDays=${daysEnum.name()})}" th:text="'→→→→→ ' +  ${daysEnum.expectDays()} + ' DAYS'"></a></h4>
+
+
+
+                                                    </div>
+                                                </div>
+                                                <form th:action="@{/cart/save}" th:object="${logInStudent}" class="checkout woocommerce-checkout" method="post" name="checkout">
+
+                                                <div id="customer_details">
+                                                    <div class="col-xs-12 col-sm-6">
+
+                                                        <div class="woocommerce-billing-fields">
+                                                            <h2>Address to send books</h2>
+                                                            <br>
+                                                            <div class="cart-head">
+                                                            <div class="col-xs-12 col-sm-6 account-option">
+                                                                <ul>
+                                                                    <li><a th:href="@{/edit_data}">Edit Address</a></li>
+                                                                </ul>
+                                                            </div>
+                                                            </div>
+                                                            <span class="underline left"></span>
+                                                            <div class="row">
+                                                                <div class="billing-address-box">
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_first_name_field" class="form-row form-row form-row-first">
+                                                                            <label for="first_name">Fist name:</label>
+                                                                            <input type="text" th:field="*{firstName}" value="" autocomplete="family-name" placeholder="Last Name" id="first_name" name="billing_last_name" class="input-text" readonly>                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_last_name_field" class="form-row form-row form-row-last validate-required">
+                                                                            <label for="last_name">Last name:</label>
+                                                                            <input type="text" th:field="*{lastName}" value="" autocomplete="family-name" placeholder="Last Name" id="last_name" name="billing_last_name" class="input-text" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="clear"></div>
+
+                                                                    <div class="col-xs-12 col-sm-12">
+                                                                        <p id="billing_address_1_field" class="form-row form-row form-row-wide address-field validate-required">
+                                                                            <label for="billing_address_1">Address:</label>
+                                                                            <input th:field="*{addressFirstLine}" type="text" value="" placeholder="Address" id="billing_address_1" name="billing_address_1" class="input-text" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_city_field" class="form-row form-row form-row-wide address-field validate-required" data-o_class="form-row form-row form-row-wide address-field validate-required">
+                                                                            <label for="billing_city">Town / City:</label>
+                                                                            <input th:value="*{addressSecondLine}" type="text"  placeholder="Town / City" id="billing_city" name="billing_city" class="input-text" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_state_field" class="form-row form-row form-row-first address-field validate-state validate-required" data-o_class="form-row form-row form-row-first address-field validate-required validate-state">
+                                                                            <label for="billing_state">State / County:</label>
+
+                                                                            <input type="text" th:field="*{country}" id="billing_state" name="billing_state" placeholder="State / County" value="" class="input-text " readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_postcode_field" class="form-row form-row form-row-last address-field validate-postcode validate-required" data-o_class="form-row form-row form-row-last address-field validate-required validate-postcode">
+                                                                            <label for="billing_postcode">Postcode / ZIP:</label>
+
+                                                                            <input type="text" th:field="*{postCode}" placeholder="Postcode / ZIP" id="billing_postcode" name="billing_postcode" class="input-text " readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-sm-6">
+                                                                        <p id="billing_phone_field" class="form-row form-row form-row-last validate-required validate-phone">
+                                                                            <label for="billing_phone">Phone:</label>
+
+                                                                            <input type="tel" th:field="*{telephone}" autocomplete="tel" placeholder="Phone" id="billing_phone" name="billing_phone" class="input-text " readonly>
+                                                                        </p>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="clear"></div>
+                                                        </div>
+                                                        <a th:href="@{/process(value=true)}"  id="place_order" text="Process" class="button alt btn btn-default"> Place order </a>
+
+                                                    </div>
+
+
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                    </div>
+
+                                        </form>
+
+                                </div>
+                                </div><!-- .entry-content -->
+                            </article>
                         </div>
                     </div>
                 </div>
@@ -235,8 +424,7 @@
         </main>
     </div>
 </div>
-<!-- End: Cart Section -->
-
+<!-- End: Cart Checkout Section -->
 
 
         

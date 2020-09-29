@@ -19,13 +19,13 @@ public class LoginServiceImp implements LoginService {
 
     private TokenRepository tokenRepository;
     private EmailService emailService;
-    private StudentServiceInt studentServiceInt;
+    private StudentService studentService;
 
     @Autowired
-    public LoginServiceImp(TokenRepository tokenRepository, EmailService emailService, StudentServiceInt studentServiceInt) {
+    public LoginServiceImp(TokenRepository tokenRepository, EmailService emailService, StudentService studentService) {
         this.tokenRepository = tokenRepository;
         this.emailService = emailService;
-        this.studentServiceInt = studentServiceInt;
+        this.studentService = studentService;
     }
 
 
@@ -36,7 +36,7 @@ public class LoginServiceImp implements LoginService {
         Student student =
                 mapToStudentFromStudentAddressDto(studentAddressDto);
 
-        studentServiceInt.saveSrudent(student);
+        studentService.saveSrudent(student);
 
           Token confirmationToken = new Token(student);
          tokenRepository.save(confirmationToken);
@@ -62,7 +62,7 @@ public class LoginServiceImp implements LoginService {
 
         adress.setId(0);
 
-        studentServiceInt.saveStudentUserActivateAndAssignAddress(student,adress);
+        studentService.saveStudentUserActivateAndAssignAddress(student,adress);
 
 
     }

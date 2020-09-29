@@ -4,21 +4,17 @@ import com.tomsapp.Toms.V2.entity.Books;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BooksServiceInt {
 
-    public List<Books> getBooks();
-    public void saveBooks(Books books);
 
-    void deleeteBookById(int bookId);
 
-    Books getbooById(int bookId);
 
-    List<Books> searchByTitleorAutorOrIbns(String searchField);
-
-  List<Books> getAvaibleBooks();
+    Optional<Books> getBookByIdString(String bookId);
 
     void saveBooksList(List<Books> booksList);
 
-    Page<Books> findOrProvideList(int size, String dropCartEnum);
+
+    Page<Books> findAllOrFindByKeyword();
 }

@@ -8,7 +8,9 @@ import java.util.Objects;
 
 public class StudentAddressDto {
 
-    int id;
+    int studentId;
+
+    int addressId;
     @NotNull
     @Size(min=2,max = 12, message = "Max 2 , Min 8 digit")
     private String firstName;
@@ -49,18 +51,17 @@ public class StudentAddressDto {
     private String telephone;
 
 
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentAddressDto that = (StudentAddressDto) o;
-        return id == that.id &&
+        return studentId == that.studentId &&
+                addressId == that.addressId &&
                 Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(email, that.email) &&
+                Objects.equals(confirmEmail, that.confirmEmail) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(confirmPassword, that.confirmPassword) &&
                 Objects.equals(addressFirstLine, that.addressFirstLine) &&
@@ -72,18 +73,18 @@ public class StudentAddressDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, password, confirmPassword, addressFirstLine, addressSecondLine, postCode, country, telephone);
+        return Objects.hash(studentId, addressId, firstName, lastName, email, confirmEmail, password, confirmPassword, addressFirstLine, addressSecondLine, postCode, country, telephone);
     }
 
     public StudentAddressDto() {
     }
 
-    public int getId() {
-        return id;
+    public int getStudentId() {
+        return studentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getFirstName() {
@@ -166,6 +167,14 @@ public class StudentAddressDto {
         this.telephone = telephone;
     }
 
+    public int getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(int addressId) {
+        this.addressId = addressId;
+    }
+
     public String getConfirmEmail() {
         return confirmEmail;
     }
@@ -184,7 +193,8 @@ public class StudentAddressDto {
     @Override
     public String toString() {
         return "StudentAddressDto{" +
-                "id=" + id +
+                "studentId=" + studentId +
+                ", addressId=" + addressId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

@@ -62,4 +62,36 @@ class StudentAddressMaperTest {
 
     }
 
+    @Test
+    void testMapToStudentAddressDtoFromStudent(){
+        //given
+        String sample="sample";
+        Student student= new Student();
+        Adress adress = new Adress();
+
+        adress.setAddressFirstLine(sample);
+        adress.setPostCode(sample);
+        adress.setId(22);
+        student.setAdresses(adress);
+        student.setId(44);
+
+
+        student.setEmail(sample);
+        student.setFirstName(sample);
+
+        //then
+        StudentAddressDto studentAddressDto = mapToStudentAddressDtoFromStudent(student);
+        //when
+        assertEquals(studentAddressDto.getEmail(),sample);
+        assertEquals(studentAddressDto.getFirstName(),sample);
+        assertEquals(studentAddressDto.getAddressFirstLine(),sample);
+        assertEquals(studentAddressDto.getPostCode(),sample);
+        assertEquals(studentAddressDto.getStudentId(),44);
+        assertEquals(studentAddressDto.getAddressId(),22);
+
+
+
+
+    }
+
 }

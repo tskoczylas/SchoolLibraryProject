@@ -1,5 +1,6 @@
 package com.tomsapp.Toms.V2.entity;
 
+import com.tomsapp.Toms.V2.enums.BorrowDaysEnum;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,37 +17,16 @@ public class Borrowing {
 
     @CreationTimestamp
     private LocalDateTime createdDate;
+    @Enumerated(value = EnumType.STRING)
+    private BorrowDaysEnum borrowDaysEnum;
 
-    private LocalDateTime endBorrowDate;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "student_id")
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Student.class)
     Student student;
 
-
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "book_id")
+    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Books.class)
     Books books;
 
-
-
-
-
-
     public Borrowing() {
-    }
-
-
-    @Override
-    public String toString() {
-        return "Borrowing{" +
-                "id=" + id +
-                ", createdDate=" + createdDate +
-                ", endBorrowDate='" + endBorrowDate + '\'' +
-                ", student=" + student +
-                ", books=" + books +
-                '}';
     }
 
 
@@ -66,12 +46,12 @@ public class Borrowing {
         this.createdDate = createdDate;
     }
 
-    public LocalDateTime getEndBorrowDate() {
-        return endBorrowDate;
+    public BorrowDaysEnum getBorrowDaysEnum() {
+        return borrowDaysEnum;
     }
 
-    public void setEndBorrowDate(LocalDateTime endBorrowDate) {
-        this.endBorrowDate = endBorrowDate;
+    public void setBorrowDaysEnum(BorrowDaysEnum borrowDaysEnum) {
+        this.borrowDaysEnum = borrowDaysEnum;
     }
 
     public Student getStudent() {
@@ -90,7 +70,6 @@ public class Borrowing {
         this.books = books;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,13 +77,24 @@ public class Borrowing {
         Borrowing borrowing = (Borrowing) o;
         return id == borrowing.id &&
                 Objects.equals(createdDate, borrowing.createdDate) &&
-                Objects.equals(endBorrowDate, borrowing.endBorrowDate) &&
+                borrowDaysEnum == borrowing.borrowDaysEnum &&
                 Objects.equals(student, borrowing.student) &&
                 Objects.equals(books, borrowing.books);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdDate, endBorrowDate, student, books);
+        return Objects.hash(id, createdDate, borrowDaysEnum, student, books);
+    }
+
+    @Override
+    public String toString() {
+        return "Borrowing{" +
+                "id=" + id +
+                ", createdDate=" + createdDate +
+                ", borrowDaysEnum=" + borrowDaysEnum +
+                ", student=" + student +
+                ", books=" + books +
+                '}';
     }
 }

@@ -1,27 +1,10 @@
 package com.tomsapp.Toms.V2.controller;
 
-import com.tomsapp.Toms.V2.entity.Adress;
-import com.tomsapp.Toms.V2.entity.Student;
-import com.tomsapp.Toms.V2.exeption.NoSuchUserExeptions;
-import com.tomsapp.Toms.V2.service.AdressService;
-import com.tomsapp.Toms.V2.service.StudentServiceInt;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //@ExtendWith(SpringExtension.class)
 //@WebMvcTest({AdressController.class, AdressServiceInt.class})
@@ -32,7 +15,7 @@ class AdressControllerTest {
 private AdressService adressService;
 
 @Mock
-private StudentServiceInt studentServiceInt;
+private StudentService studentService;
 
 
 @InjectMocks
@@ -57,7 +40,7 @@ public void setup(){
         Student tempStudent = new Student();
         Adress adresse = new Adress(1, "Simple", "Simple", "Simple", tempStudent);
 
-        when(studentServiceInt.findbyId(studentId)).thenReturn(tempStudent);
+        when(studentService.findbyId(studentId)).thenReturn(tempStudent);
         when(adressService.findAdressByStudentId(studentId)).thenReturn(adresses);
         mockMvc.perform(get("/adress/showAdress?studentId=1"))
                 .andExpect(status().isOk())
@@ -74,7 +57,7 @@ public void setup(){
                 Collections.singletonList
                         ( new Adress(1, "Simple", "Simple", "Simple", tempStudent));
 
-        when(studentServiceInt.findbyId(22)).thenThrow(NoSuchUserExeptions.class);
+        when(studentService.findbyId(22)).thenThrow(NoSuchUserExeptions.class);
         when(adressService.findAdressByStudentId(22)).thenReturn(adresses);
 
 

@@ -4,7 +4,7 @@ import com.tomsapp.Toms.V2.dto.StudentAddressDto;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.entity.Token;
 import com.tomsapp.Toms.V2.service.LoginService;
-import com.tomsapp.Toms.V2.service.StudentServiceInt;
+import com.tomsapp.Toms.V2.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +20,12 @@ import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.mapToStudentAddress
 public class LoginController {
 
     LoginService loginService;
-    StudentServiceInt studentServiceInt;
+    StudentService studentService;
 
     @Autowired
-    public LoginController(LoginService loginService, StudentServiceInt studentServiceInt) {
+    public LoginController(LoginService loginService, StudentService studentService) {
         this.loginService = loginService;
-        this.studentServiceInt = studentServiceInt;
+        this.studentService = studentService;
     }
 
 
@@ -52,7 +52,7 @@ public class LoginController {
     public String sendConformationEmail(@ModelAttribute("emailUser") StudentAddressDto studentAddressDto, Model model)  {
 
         Optional<Student> studentByEmail =
-                studentServiceInt.
+                studentService.
                         findStudentByEmail(studentAddressDto.getEmail());
 
         if(studentAddressDto.getEmail()==null||studentAddressDto.getConfirmEmail()==null)
@@ -115,7 +115,7 @@ public class LoginController {
                     " " + studentAddressDto.getLastName() +
                     " welcome to our library, now you can log in" );
             loginService.saveRegistration(studentAddressDto);
-            loginService.deactivateTokenByStudentId(studentAddressDto.getId());
+            loginService.deactivateTokenByStudentId(studentAddressDto.getStudentId());
         return "message";}
     }
 

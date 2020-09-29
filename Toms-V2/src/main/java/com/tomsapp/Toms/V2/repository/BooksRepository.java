@@ -14,9 +14,6 @@ public interface BooksRepository extends JpaRepository<Books,Integer> {
 
 
 
-     ///Page<Books> findAllByTitleOrAuthorsOrIsbnAllIgnoreCase(String searchFieldTitle,
-       //                                                             String searchFieldAuthors,
-       //                                                             String searchFieldIsbn, Pageable pageable );
 
      @Query(value = "select u from Books u where u.authors like %:keyword% or u.isbn like %:keyword% or u.title like %:keyword%")
      Page<Books> findIt(@Param("keyword") String keyword, Pageable pageable );

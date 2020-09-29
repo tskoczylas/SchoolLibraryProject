@@ -18,10 +18,11 @@ import java.util.List;
 
 public class PageSession {
 
-   private String keyword;
-   private String currentPage;
-   private Sort sort;
-   private SelectEnum selectEnum;
+   protected String keyword;
+   protected String currentPage;
+   protected Sort sort;
+   protected SelectEnum selectEnum;
+   protected String pageSize;
 
 
 
@@ -37,43 +38,47 @@ public class PageSession {
         return keyword;
     }
 
-    public void setKeyword(String keyword) {
-        if (keyword!=null){  this.keyword = keyword;}
-    }
 
-    public String getCurrentPage() {
-        if(currentPage==null) return "0";
-        else return currentPage;
-    }
-
-    public void setCurrentPage(String currentPage) {
-        if(currentPage!=null) this.currentPage = currentPage;
-    }
-
-    public void setCurrentPageAndKeyword(String currentPage,String keyword) {
-        if(currentPage!=null) this.currentPage = currentPage;
-        if (keyword!=null){  this.keyword = keyword;}
-    }
 
     public Sort getSort() {
         return sort;
     }
 
-    public void refreshPage(){
-        currentPage="0";
+    public int getCurrentPage() {
+        if(currentPage==null||!currentPage.matches("[0-9]+")) return 0;
+        else return Integer.parseInt(currentPage);
     }
 
+    public int getPageSize() {
+        if(pageSize==null||!pageSize.matches("[0-9]+")) return 20;
+        else return Integer.parseInt(pageSize);
+    }
     public SelectEnum getSelectEnum() {
         return selectEnum;
     }
 
+    public void setKeyword(String keyword) {
+        if (keyword!=null){  this.keyword = keyword;}
+    }
+    public void setCurrentPage(String currentPage) {
+        if(currentPage!=null) this.currentPage = currentPage;
+    }
+
+    public void setCurrentPageKeywordAndPageSize(String currentPage,String keyword,String pageSize) {
+        if(currentPage!=null) this.currentPage = currentPage;
+        if (keyword!=null){  this.keyword = keyword;}
+        if(pageSize!=null){ this.pageSize = pageSize;}}
+
+
+
+    public void refreshPage(){
+        currentPage="0";
+    }
+
     public void sortBy(String dropCartEnum){
-        if(!dropCartEnum.isEmpty()){
-
-
-            this.selectEnum=SelectEnum.valueOf(dropCartEnum);
-            SelectEnum selectEnum = SelectEnum.valueOf(dropCartEnum);
-            sort = selectEnum.getSortByEnum();}}
+        if(Arrays.stream(SelectEnum.values()).anyMatch((t) -> t.name().equals(dropCartEnum))){
+            selectEnum=SelectEnum.valueOf(dropCartEnum);
+            sort = SelectEnum.valueOf(dropCartEnum).getSortByEnum();}}
 }
 
 

@@ -99,7 +99,7 @@
                                                             <div class="price"><p th:text="${cartBooks.size()}"></p></div>
                                                         </div>
                                                         <div class="cart-buttons">
-                                                            <a href="cart.html" class="btn btn-dark-gray">View Cart</a>
+                                                            <a th:href="@{/checkout}" class="btn btn-dark-gray">View Cart</a>
                                                             <a href="checkout.html" class="btn btn-primary">Checkout</a>
                                                         </div>
                                                     </div>
@@ -122,7 +122,7 @@
                                             <a data-toggle="dropdown" class="dropdown-toggle disabled" href="books-media-list-view.html">Books &amp; Media</a>
                                             <ul class="dropdown-menu">
                                                 <li><a href="books-media-list-view.html">Books &amp; Media List View</a></li>
-                                                <li><a href="books-media-gird-view-v1.html">Books &amp; Media Grid View V1</a></li>
+                                                <li><a href="book.html">Books &amp; Media Grid View V1</a></li>
                                                 <li><a href="books-media-gird-view-v2.html">Books &amp; Media Grid View V2</a></li>
                                                 <li><a href="books-media-detail-v1.html">Books &amp; Media Detail V1</a></li>
                                                 <li><a href="books-media-detail-v2.html">Books &amp; Media Detail V2</a></li>
@@ -177,7 +177,7 @@
                                         <a href="books-media-list-view.html">Books &amp; Media</a>
                                         <ul>
                                             <li><a href="books-media-list-view.html">Books &amp; Media List View</a></li>
-                                            <li><a href="books-media-gird-view-v1.html">Books &amp; Media Grid View V1</a></li>
+                                            <li><a href="book.html">Books &amp; Media Grid View V1</a></li>
                                             <li><a href="books-media-gird-view-v2.html">Books &amp; Media Grid View V2</a></li>
                                             <li><a href="books-media-detail-v1.html">Books &amp; Media Detail V1</a></li>
                                             <li><a href="books-media-detail-v2.html">Books &amp; Media Detail V2</a></li>
@@ -271,7 +271,7 @@
                                         <div class="row">
                                             <div class="col-md-4 col-sm-4">
                                                 <form id="form" th:action="@{/books/showbooks}" th:object="${dropCartEnum}" method="get">
-                                                <select onchange="$('#submit').click();" id="dropCartEnum" name="dropCartEnum">
+                                                <select  id="dropCartEnum" name="dropCartEnum">
                                                     <option  th:each="i : ${dropCartEnum}"
                                                              th:value="${i}" th:text="${i.description}">
                                                     </option>

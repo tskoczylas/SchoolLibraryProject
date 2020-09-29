@@ -8,25 +8,25 @@ import com.tomsapp.Toms.V2.entity.*;
 import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.mapper.BookJsonToBookMaper;
 import com.tomsapp.Toms.V2.service.BooksService;
-import com.tomsapp.Toms.V2.service.StudentService;
+import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 public class SetupService {
-    private StudentService studentService;
+    private StudentServiceInt studentServiceInt;
     private BooksService booksService;
     private BookJsonToBookMaper bookJsonToBookMaper;
 
-    public SetupService(StudentService studentService,  BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
-        this.studentService = studentService;
+    public SetupService(StudentServiceInt studentServiceInt, BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
+        this.studentServiceInt = studentServiceInt;
 
         this.booksService = booksService;
         this.bookJsonToBookMaper = bookJsonToBookMaper;
@@ -59,33 +59,36 @@ public class SetupService {
 
         booksService.saveBooksList(booksList);
     }
-    @PostConstruct
+
     public void CreateAdmin() {
+        BCryptPasswordEncoder  bCryptPasswordEncoder =new BCryptPasswordEncoder();
 
         Student adminStudent = new Student();
         adminStudent.setEnabled(true);
         adminStudent.setEmail("admin");
         adminStudent.setFirstName("AdminTomasz");
         adminStudent.setLastName("AdminSkoczylas");
-     //   adminStudent.setPassword(passwordEncoder.encode("admin"));
+        adminStudent.setPassword(bCryptPasswordEncoder.encode("admin"));
         adminStudent.setRole(Role.ROLE_ADMIN);
 
-        studentService.saveSrudent(adminStudent);
+        studentServiceInt.saveSrudent(adminStudent);
 
 
     }
-    @PostConstruct
+
     public void CreateUser() {
+        BCryptPasswordEncoder  bCryptPasswordEncoder =new BCryptPasswordEncoder();
 
        Student userStudent=new Student();
         userStudent.setEnabled(true);
         userStudent.setEmail("email");
+
         userStudent.setFirstName("UserTomasz");
         userStudent.setLastName("UserSkoczylas");
-      //  userStudent.setPassword(passwordEncoder.encode("user"));
+        userStudent.setPassword(bCryptPasswordEncoder.encode("user"));
         userStudent.setRole(Role.ROLE_USER);
 
-        studentService.saveSrudent(userStudent);
+        studentServiceInt.saveSrudent(userStudent);
 
 
     }

@@ -4,10 +4,9 @@ import com.tomsapp.Toms.V2.dto.StudentAddressDto;
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.entity.Token;
 import com.tomsapp.Toms.V2.service.LoginService;
-import com.tomsapp.Toms.V2.service.StudentServiceInt;
+import com.tomsapp.Toms.V2.service.StudentService;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,17 +14,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import sun.rmi.runtime.Log;
 
 import java.util.Optional;
 
 import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.mapToStudentAddressDtoFromToken;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.data.repository.util.ClassUtils.hasProperty;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -34,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LoginControllerTest {
 
     @Mock
-    StudentServiceInt studentServiceInt;
+    StudentService studentService;
 
     @Mock
     LoginService loginService;
@@ -120,7 +115,7 @@ class LoginControllerTest {
         studentAddressDto.setEmail(sampleEmail);
         studentAddressDto.setConfirmEmail(sampleEmail);
 
-       when(studentServiceInt.findStudentByEmail(studentAddressDto.getEmail())).thenReturn(optionalStudent);
+       when(studentService.findStudentByEmail(studentAddressDto.getEmail())).thenReturn(optionalStudent);
         //then
         MockHttpServletRequestBuilder updateDetails = post("/conformation_email")
                 .flashAttr("emailUser", studentAddressDto);
@@ -140,7 +135,7 @@ class LoginControllerTest {
         studentAddressDto.setEmail(sampleEmail);
         studentAddressDto.setConfirmEmail(sampleEmail);
 
-        when(studentServiceInt.findStudentByEmail(studentAddressDto.getEmail())).thenReturn(Optional.empty());
+        when(studentService.findStudentByEmail(studentAddressDto.getEmail())).thenReturn(Optional.empty());
         //then
 
         MockHttpServletRequestBuilder updateDetails = post("/conformation_email")
@@ -369,7 +364,7 @@ class LoginControllerTest {
                 .andExpect(model().attribute("messageTitle",is(not(emptyString()))))
                 .andExpect(model().attribute("messageText",is(not(emptyString()))));
         verify(loginService).saveRegistration(studentAddressDto);
-        verify(loginService).deactivateTokenByStudentId(studentAddressDto.getId());
+        verify(loginService).deactivateTokenByStudentId(studentAddressDto.getStudentId());
 
     }
 
