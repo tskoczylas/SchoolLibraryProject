@@ -80,11 +80,11 @@
                                         <div class="header-cart dropdown">
                                             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                                 <i class="fa fa-shopping-cart"></i>
-                                                <small th:text="${cartBooks.size()}">0</small>
+                                                <small th:text="${basketSession.getSelectBooks().size()}">0</small>
                                             </a>
                                             <div class="dropdown-menu cart-dropdown">
                                                 <ul>
-                                                    <li class="clearfix" th:each="eachCartBook:${cartBooks}">
+                                                    <li class="clearfix" th:each="eachCartBook:${basketSession.getSelectBooks()}">
                                                         <img th:src="${eachCartBook.thumbnailUrl}" alt="cart item" />
                                                         <div class="item-info">
                                                             <div class="name">
@@ -98,7 +98,7 @@
                                                 </ul>
                                                 <div class="cart-total">
                                                     <div class="title">SubTotal</div>
-                                                    <div class="price"><p th:text="${cartBooks.size()}"></p></div>
+                                                    <div class="price"><p th:text="${basketSession.getSelectBooks().size()}"></p></div>
                                                 </div>
                                                 <div class="cart-buttons">
                                                     <a href="cart.html" class="btn btn-dark-gray">View Cart</a>
@@ -292,7 +292,7 @@
 
                                                             </tr>
                                                             </thead>
-                                                            <tbody th:each="cart: ${cartBooks}">
+                                                            <tbody th:each="cart: ${basketSession.getSelectBooks()}">
                                                             <tr class="cart_item">
                                                                 <td class="product-name">
                                                                     <span th:text="*{cart.title}" class="woocommerce-product-amount">The Great Gatsby</span>
@@ -307,7 +307,7 @@
                                                             <tfoot>
                                                             <tr class="cart-subtotal">
                                                                 <td>Cost per day</td>
-                                                                <td th:text="${daysEnum.costPerDays} + ' £'"></td>
+                                                                <td th:text="${basketSession.getBorrowPeriodEnum().costPerDays} + ' £'"></td>
 
                                                             </tr>
 
@@ -317,17 +317,17 @@
                                                             </tr>
                                                             <tr class="order-total">
                                                                 <th>Total cost</th>
-                                                                <th th:text="${#numbers.formatDecimal(daysEnum.totalCost, 1, 2, 'COMMA') + ' £' }"> </th>
+                                                                <th th:text="${#numbers.formatDecimal(basketSession.getBorrowPeriodEnum().totalCost, 1, 2, 'COMMA') + ' £' }"> </th>
                                                             </tr>
                                                             <tr class="order-total">
                                                                 <th>Order Totals Days</th>
-                                                                <th th:text="${daysEnum.days}">/th>
+                                                                <th th:text="${basketSession.getBorrowPeriodEnum().days}">/th>
                                                             </tr>
                                                             </tfoot>
                                                         </table>
 
 
-                                                   <h4> <a class="cart-buttons" th:href="@{/checkout/(borrowDays=${daysEnum.name()})}" th:text="'→→→→→ ' +  ${daysEnum.expectDays()} + ' DAYS'"></a></h4>
+                                                   <h4> <a class="cart-buttons" th:href="@{/checkout/(borrowDays=${basketSession.getBorrowPeriodEnum().name()})}" th:text="'→→→→→ ' +  ${basketSession.getBorrowPeriodEnum().expectDays()} + ' DAYS'"></a></h4>
 
 
 
@@ -403,8 +403,8 @@
                                                             </div>
                                                             <div class="clear"></div>
                                                         </div>
-                                                        <a th:href="@{/process(value=true)}"  id="place_order" text="Process" class="button alt btn btn-default"> Place order </a>
-
+                                                       <a th:if="${basketSession.selectBooks.size()!=0}" th:href="@{/process(value=true)}"  id="place_order" text="Process" class="button alt btn btn-default"> Place order and pay </a>
+                                                            <br><br>
                                                     </div>
 
 

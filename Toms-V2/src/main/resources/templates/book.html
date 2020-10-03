@@ -70,7 +70,10 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div  class="topbar-links">
-
+                                                <form th:action="@{/logout}" method="post">
+                                                    <input type="submit" value="Log out"/>
+                                                </form>
+                                                <br><br>
                                                 <a sec:authorize="isAuthenticated()" sec:authentication="name"   href="//login.html"><i class="fa fa-lock"></i>Login / Register</a>
                                                 <a sec:authorize="hasRole('ROLE_ANONYMOUS')"   th:href="@{/login}"><i class="fa fa-lock"></i>Login / Register</a>
 
@@ -78,25 +81,25 @@
                                                 <div class="header-cart dropdown">
                                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                                         <i class="fa fa-shopping-cart"></i>
-                                                        <small th:text="${cartBooks.size()}">0</small>
+                                                        <small th:text="${basketSession.selectBooks.size()}">0</small>
                                                     </a>
                                                     <div class="dropdown-menu cart-dropdown">
                                                         <ul>
-                                                            <li class="clearfix" th:each="eachCartBook:${cartBooks}">
-                                                                <img th:src="${eachCartBook.thumbnailUrl}" alt="cart item" />
+                                                            <li class="clearfix" th:each="selectBooks:${basketSession.selectBooks}">
+                                                                <img th:src="${selectBooks.thumbnailUrl}" alt="cart item" />
                                                                 <div class="item-info">
                                                                     <div class="name">
-                                                                        <a href="#"><p th:text="${eachCartBook.title}"></p></a>
+                                                                        <a href="#"><p th:text="${selectBooks.title}"></p></a>
                                                                     </div>
-                                                                    <div class="author"><strong>Author:</strong> <p th:text="${eachCartBook.authors}"></p></div>
+                                                                    <div class="author"><strong>Author:</strong> <p th:text="${selectBooks.authors}"></p></div>
                                                                 </div>
-                                                                <a class="remove" th:href="@{/books/addToCard/(removeCartBookId=${eachCartBook.id})}"><i class="fa fa-trash-o"></i></a>
+                                                                <a class="remove" th:href="@{/book/add/(removeCartBookId=${selectBooks.id})}"><i class="fa fa-trash-o"></i></a>
                                                             </li>
 
                                                         </ul>
                                                         <div class="cart-total">
                                                             <div class="title">SubTotal</div>
-                                                            <div class="price"><p th:text="${cartBooks.size()}"></p></div>
+                                                            <div class="price"><p th:text="${basketSession.selectBooks.size()}"></p></div>
                                                         </div>
                                                         <div class="cart-buttons">
                                                             <a th:href="@{/checkout}" class="btn btn-dark-gray">View Cart</a>
@@ -247,11 +250,11 @@
                                     <div class="container">
                                         <div class="filter-box">
                                             <h3>What are you looking for at the library?</h3>
-                                            <form th:action="@{/books/showbooks}" method="get">
+                                            <form th:action="@{/book}" method="get">
                                                 <div class="col-md-4 col-sm-6 center">
                                                     <div class="form-group">
-                                                        <label class="sr-only" for="keywords">Search by Keyword</label>
-                                                        <input class="form-control" placeholder="Search by Keyword" id="keywords" name="keywords" type="text">
+                                                        <label class="sr-only" for="keyword">Search by Keyword</label>
+                                                        <input class="form-control" placeholder="Search by Keyword" id="keyword" name="keyword" type="text">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2 col-sm-6">
@@ -270,9 +273,9 @@
                                     <div class="filter-options margin-list">
                                         <div class="row">
                                             <div class="col-md-4 col-sm-4">
-                                                <form id="form" th:action="@{/books/showbooks}" th:object="${dropCartEnum}" method="get">
-                                                <select  id="dropCartEnum" name="dropCartEnum">
-                                                    <option  th:each="i : ${dropCartEnum}"
+                                                <form id="form" th:action="@{/book}" th:object="${selectEnum}" method="get">
+                                                <select  id="selectEnum" name="selectEnum">
+                                                    <option  th:each="i : ${selectEnum}"
                                                              th:value="${i}" th:text="${i.description}">
                                                     </option>
 
@@ -291,18 +294,18 @@
                                                 <figure>
                                                     <img th:src="${books.thumbnailUrl}" alt="Book">
                                                     <figcaption>
+
                                                         <p><strong th:text="${books.title}">The Great Gatsby</strong></p>
                                                         <p th:text="'Author: ' + ${books.authors}">  </p>
                                                     </figcaption>
                                                 </figure>
-                                                <div class="book-list-icon red-icon" th:text="${books.totalNumber}"></div>
                                                 <div class="single-book-box">
                                                     <div class="post-detail">
 
                                                         <div class="optional-links">
                                                             <ul>
-                                                                <li>
-                                                                    <a th:href="@{/books/addToCard(bookId=${books.id})}"
+                                                                <li th:if="${!basketSession.isBasketFull() and books.isAvailable()}">
+                                                                    <a th:href="@{/book/add(bookId=${books.id})}"
                                                                         data-toggle="blog-tags" data-placement="top" title="Add TO CART">
                                                                         <i class="fa fa-shopping-cart"></i>
                                                                     </a>
@@ -311,10 +314,17 @@
                                                             </ul>
                                                         </div>
                                                         <header class="entry-header">
+
+
                                                             <h3 class="entry-title"><a href="books-media-detail-v1.html"><p th:text="${books.title}"></a></h3>
                                                             <ul>
+
                                                                 <li><strong>Author:</strong> <p th:text="${books.authors}">  </p></li>
                                                                 <li><strong>ISBN:</strong> <p th:text="${books.isbn}">  </p></li>
+                                                                <h4><p><strong class="text-warning" th:if="${!books.isAvailable()}" text="'Book unviable'">Item unviable</strong></p></h4>
+
+                                                                <h4><p><strong th:if="${books.isAvailable()}" th:text="'Avail quantiy: ' + ${books.availableQuantity}">The Great Gatsby</strong></p></h4>
+
                                                             </ul>
                                                         </header>
                                                         <div class="entry-content">
@@ -333,23 +343,23 @@
                                     <nav class="navigation pagination text-center">
                                         <h2 class="screen-reader-text">Posts navigation</h2>
                                         <div  class="nav-links">
-                                            <a th:if="${currentPage>=1}"  class="prev page-numbers"  th:href="@{/books/showbooks(pageNumber=${currentPage}-1)}"
+                                            <a th:if="${pageSession.getCurrentPage()>=1}"  class="prev page-numbers"  th:href="@{/book(currentPage=${pageSession.getCurrentPage()}-1)}"
                                             ><i  class="fa fa-long-arrow-left"></i> Previous</a>
-                                            <a th:if="${currentPage>=3}"  class="page-numbers" th:text="${currentPage}-'3'"
-                                               th:href="@{/books/showbooks(pageNumber=${currentPage}-3)}">1</a>
-                                            <a th:if="${currentPage>=2}"  class="page-numbers" th:text="${currentPage}-'2'"
-                                                th:href="@{/books/showbooks(pageNumber=${currentPage}-2)}">1</a>
-                                            <a th:if="${currentPage>=1}" class="page-numbers" th:text="${currentPage}-'1'"
-                                               th:href="@{/books/showbooks(pageNumber=${currentPage}-1)}">1</a>
-                                            <span th:text="${currentPage}" class="page-numbers current">2</span>
-                                            <a th:if="${lastPage>currentPage}"  class="page-numbers" th:text="${currentPage}+1"
-                                            th:href="@{/books/showbooks(pageNumber=${currentPage}+1)}">1</a>
-                                            <a th:if="${lastPage>currentPage+1}" class="page-numbers" th:text="${currentPage}+2"
-                                                th:href="@{/books/showbooks(pageNumber=${currentPage}+2)}">1</a>
-                                            <a th:if="${lastPage>currentPage+2}"  class="page-numbers" th:text="${currentPage}+3"
-                                                th:href="@{/books/showbooks(pageNumber=${currentPage}+3)}">1</a>
-                                            <a th:if="${lastPage>currentPage}" class="next page-numbers"
-                                               th:href="@{/books/showbooks(pageNumber=${currentPage}+1)}">Next <i class="fa fa-long-arrow-right"></i></a>
+                                            <a th:if="${pageSession.getCurrentPage()>=3}"  class="page-numbers" th:text="${pageSession.getCurrentPage()}-'3'"
+                                               th:href="@{/book(currentPage=${pageSession.getCurrentPage()}-3)}">1</a>
+                                            <a th:if="${pageSession.getCurrentPage()>=2}"  class="page-numbers" th:text="${pageSession.getCurrentPage()}-'2'"
+                                                th:href="@{/book(currentPage=${pageSession.getCurrentPage()}-2)}">1</a>
+                                            <a th:if="${pageSession.getCurrentPage()>=1}" class="page-numbers" th:text="${pageSession.getCurrentPage()}-'1'"
+                                               th:href="@{/book(currentPage=${pageSession.getCurrentPage()}-1)}">1</a>
+                                            <span th:text="${pageSession.getCurrentPage()}" class="page-numbers current">2</span>
+                                            <a th:if="${lastPage>pageSession.getCurrentPage()}"  class="page-numbers" th:text="${pageSession.getCurrentPage()}+1"
+                                            th:href="@{/book(currentPage=${pageSession.getCurrentPage()}+1)}">1</a>
+                                            <a th:if="${lastPage>pageSession.getCurrentPage()+1}" class="page-numbers" th:text="${pageSession.getCurrentPage()}+2"
+                                                th:href="@{/book(currentPage=${pageSession.getCurrentPage()}+2)}">1</a>
+                                            <a th:if="${lastPage>pageSession.getCurrentPage()+2}"  class="page-numbers" th:text="${pageSession.getCurrentPage()}+3"
+                                                th:href="@{/book(currentPage=${pageSession.getCurrentPage()}+3)}">1</a>
+                                            <a th:if="${lastPage>pageSession.getCurrentPage()}" class="next page-numbers"
+                                               th:href="@{/book(currentPage=${pageSession.getCurrentPage()}+1)}">Next <i class="fa fa-long-arrow-right"></i></a>
 
 
                                         </div>
@@ -360,7 +370,7 @@
                                 <div class="col-md-3 col-md-pull-9">
                                     <aside id="secondary" class="sidebar widget-area" data-accordion-group>
                                         <div class="widget widget_related_search open" data-accordion>
-                                            <h4 class="widget-title" data-control>Related Searches</h4>
+                                            <h4 class="widget-title" data-control>Needs to be develop</h4>
                                             <div data-content>
                                                 <div data-accordion>
                                                     <h5 class="widget-sub-title" data-control>Subject</h5>

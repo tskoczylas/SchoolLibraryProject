@@ -27,7 +27,7 @@ public class PageSession {
 
 
     @PostConstruct
-    void setUp(){
+    protected void setUp(){
         Sort.TypedSort<Books> person = Sort.sort(Books.class);
         currentPage="0";
         sort= person.ascending();
@@ -37,8 +37,6 @@ public class PageSession {
     public String getKeyword() {
         return keyword;
     }
-
-
 
     public Sort getSort() {
         return sort;
@@ -52,16 +50,6 @@ public class PageSession {
     public int getPageSize() {
         if(pageSize==null||!pageSize.matches("[0-9]+")) return 20;
         else return Integer.parseInt(pageSize);
-    }
-    public SelectEnum getSelectEnum() {
-        return selectEnum;
-    }
-
-    public void setKeyword(String keyword) {
-        if (keyword!=null){  this.keyword = keyword;}
-    }
-    public void setCurrentPage(String currentPage) {
-        if(currentPage!=null) this.currentPage = currentPage;
     }
 
     public void setCurrentPageKeywordAndPageSize(String currentPage,String keyword,String pageSize) {

@@ -197,6 +197,8 @@
                 <li th:if="${messageTitle}" th:text="${messageTitle}" >Signin</li>
             </ul>
         </div>
+
+
     </div>
 </section>
 <!-- End: Page Banner -->
@@ -224,6 +226,18 @@
                                                         </label>
 
                                             </div>
+
+                                            <div th:if="${link}" class="company-detail new-account bg-light margin-list">
+
+
+                                                <p class="form-row form-row-first input-required">
+                                                    <label>
+
+                                                        <h4><a class="first-letter" th:href="${link}" th:text="${linkMes}" ></a></h4>
+                                                    </label>
+
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

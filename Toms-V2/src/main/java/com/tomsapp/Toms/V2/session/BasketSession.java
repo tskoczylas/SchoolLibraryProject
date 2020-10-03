@@ -1,13 +1,15 @@
 package com.tomsapp.Toms.V2.session;
 
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.enums.BorrowDaysEnum;
+import com.tomsapp.Toms.V2.enums.BorrowPeriodEnum;
 import com.tomsapp.Toms.V2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,46 +21,59 @@ public class BasketSession {
 
 
 
-    protected   BooksServiceInt booksServiceInt;
-    protected BorrowDaysEnum borrowDaysEnum;
+    protected BooksService booksService;
+    protected BorrowPeriodEnum borrowPeriodEnum;
     protected List<Books> selectBooks;
-
+    @Value("${value.books.maxBasketSize}")
+    protected int maxBasketSize;
 
     @Autowired
-    public BasketSession(BooksServiceInt booksServiceInt) {
-        this.booksServiceInt = booksServiceInt;
+    public BasketSession(BooksService booksService) {
+        this.booksService = booksService;
     }
 
 
     @PostConstruct
     void initiate(){
-        borrowDaysEnum=BorrowDaysEnum.MIN;
-        selectBooks =new ArrayList<>();
+        borrowPeriodEnum = BorrowPeriodEnum.MIN;
 
-}
+        selectBooks =new ArrayList<>();}
 
-    public BorrowDaysEnum getBorrowDaysEnum() {
-        return borrowDaysEnum;
+
+   public boolean isBasketFull (){
+        return maxBasketSize <= selectBooks.size(); }
+
+    public BorrowPeriodEnum getBorrowPeriodEnum() {
+        return borrowPeriodEnum;
     }
 
     public List<Books> getSelectBooks() {
+        if(borrowPeriodEnum !=null){
+        borrowPeriodEnum.calculateBorrowCost(selectBooks.size());}
         return selectBooks;
     }
 
     public void changeDayAndCalculateBorrowCost(String borrowDaysEnumString) {
 
-        if(Arrays.stream(BorrowDaysEnum.values()).anyMatch(a->a.name().equals(borrowDaysEnumString))){
-        BorrowDaysEnum borrowDaysEnum = BorrowDaysEnum.
+        if(Arrays.stream(BorrowPeriodEnum.values()).anyMatch(a->a.name().equals(borrowDaysEnumString))){
+        BorrowPeriodEnum borrowPeriodEnum = BorrowPeriodEnum.
                 valueOf(borrowDaysEnumString).
                 buttonChangeDays();
-        borrowDaysEnum.calculateBorrowCost(selectBooks.size());
-        this.borrowDaysEnum = borrowDaysEnum;}
+        borrowPeriodEnum.calculateBorrowCost(selectBooks.size());
+        this.borrowPeriodEnum = borrowPeriodEnum;}
+
+
     }
 
-    public void addBookToBorrowList(String bookId) {
-        booksServiceInt.getBookByIdString(bookId).ifPresent(book ->
+    public void addBookToBasket(String bookId) {
+
+        booksService.getBookByIdString(bookId).ifPresent(book ->
+        {if(book.isAvailable() && !isBasketFull())
         {
-            this.selectBooks.add(book); });
+            booksService.decreaseAvailableBookQuantity(book);
+            this.selectBooks.add(book); }
+
+        });
     }
 
 
@@ -67,19 +82,27 @@ public class BasketSession {
     }
 
     public void resetBorrowDaysEnum(){
-        BorrowDaysEnum[] values = BorrowDaysEnum.values();
-        borrowDaysEnum = values[0];
+        BorrowPeriodEnum[] values = BorrowPeriodEnum.values();
+        borrowPeriodEnum = values[0];
     }
 
 
-    public void removeBookFromCard(String removeCartBookId) {
-        booksServiceInt.
+    public void removeBookFromBasket(String removeCartBookId) {
+        booksService.
                      getBookByIdString(removeCartBookId).
-                        ifPresent(books1 -> this.selectBooks.remove(books1));
+                        ifPresent(books1 ->
+                        {
+                            booksService.inceaseAvailableBookQuantity(books1);
+                            this.selectBooks.remove(books1);});
     }
 
 
-
+@PreDestroy
+    protected void decreaseAvailableBooksOnTheEndOfTheSessionIfPresent(){
+        if(selectBooks!=null&&!selectBooks.isEmpty()){
+            selectBooks.forEach(books -> booksService.inceaseAvailableBookQuantity(books));
+        }
+}
 
 
 

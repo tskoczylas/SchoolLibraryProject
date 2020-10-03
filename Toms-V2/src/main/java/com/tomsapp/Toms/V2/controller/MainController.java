@@ -20,7 +20,7 @@ public class MainController {
 
 
 
-        return "redirect:/books/showbooks";
+        return "redirect:/book";
     }
 
 

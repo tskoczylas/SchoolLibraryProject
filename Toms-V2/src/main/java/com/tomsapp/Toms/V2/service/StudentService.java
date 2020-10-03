@@ -11,10 +11,10 @@ public interface StudentService {
 
 
 
-    public void saveSrudent(Student tempStudent);
+     void saveStudent(Student tempStudent);
 
 
-    public Student findStudentByEmailorUsername(String emailOrUsername);
+     Student findStudentByEmailorUsername(String emailOrUsername);
 
 
 

@@ -45,7 +45,7 @@ private StudentService studentService;
         ArgumentCaptor<Token> argumentCaptorToken=ArgumentCaptor.forClass(Token.class);
         ArgumentCaptor<Student> argumentCaptorStudent=ArgumentCaptor.forClass(Student.class);
 
-        verify(studentService).saveSrudent(argumentCaptorStudent.capture());
+        verify(studentService).saveStudent(argumentCaptorStudent.capture());
         verify(tokenRepository).save((argumentCaptorToken.capture()));
 
 
@@ -59,7 +59,7 @@ private StudentService studentService;
         assertThat(argumentCaptorToken.getValue().getToken(),is(not(emptyString())));
 
 
-        verify(emailService).sendConformationMessage(argumentCaptorToken.getValue());
+        verify(emailService).sendConformationMessageLogin(argumentCaptorToken.getValue());
 
 
 

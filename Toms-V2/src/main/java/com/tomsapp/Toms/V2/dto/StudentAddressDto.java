@@ -24,10 +24,9 @@ public class StudentAddressDto {
     private String confirmEmail;
 
     @NotNull
-    @Size(min=2,max = 12, message = "Max 2 , Min 8 digit")
+    @Size(min=2, message = "Max 2 , Min 8 digit")
     private String password;
-    @NotNull
-    @Size(min=2,max = 12, message = "Max 2 , Min 8 digit")
+
     private String confirmPassword;
 
     @NotNull

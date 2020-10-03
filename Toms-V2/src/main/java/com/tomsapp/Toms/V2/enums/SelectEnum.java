@@ -25,8 +25,8 @@ public enum  SelectEnum {
     public Sort getSortByEnum() {
         Sort.TypedSort<Books> person = Sort.sort(Books.class);
 
-        if (this == AVAILABILITYASC) return person.by(Books::getTotalNumber).ascending();
-        if (this == AVAILABILITYDEC) return person.by(Books::getTotalNumber).descending();
+        if (this == AVAILABILITYASC) return person.by(Books::getAvailableQuantity).ascending();
+        if (this == AVAILABILITYDEC) return person.by(Books::getAvailableQuantity).descending();
         if (this == AUTHORASC) return person.by(Books::getAuthors).ascending();
         if (this == AUTHORDEC) return person.by(Books::getAuthors).descending();
         if (this == TITLEASC) return person.by(Books::getTitle).ascending();

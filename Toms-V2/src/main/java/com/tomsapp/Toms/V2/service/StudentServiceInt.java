@@ -31,34 +31,15 @@ public class StudentServiceInt implements StudentService {
         this.studentsRepository = studentsRepository;
     }
 
-    List<Student> findStudentsByAuthentication(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<String> listOfAuthorities = authentication.
-                getAuthorities().
-                stream().map(GrantedAuthority::getAuthority).
-                collect(Collectors.toList());
-
-        if(authentication.isAuthenticated()&&listOfAuthorities.contains(Role.ROLE_USER.name())){
-            List<Student> students = new java.util.ArrayList<>();
-            StudentUser principal = (StudentUser) authentication.getPrincipal();
-            Student student1 = principal.getStudent();
-            students.add(student1);
-            return students;}
-        else if(authentication.isAuthenticated()&&listOfAuthorities.contains(Role.ROLE_ADMIN.name())){
-            return studentsRepository.findAll(); }
-        else return Collections.emptyList();
-    }
 
 
 
 
 
     @Override
-    public void saveSrudent(Student tempStudent) {
+    public void saveStudent(Student tempStudent) {
         studentsRepository.save(tempStudent);
     }
-
-
 
 
 

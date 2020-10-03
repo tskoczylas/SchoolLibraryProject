@@ -9,7 +9,14 @@ import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import com.tomsapp.Toms.V2.security.StudentUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,22 +29,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class StudentServiceIntTest {
 
-
+    @Mock
     private StudentsRepository studentsRepository;
-    private StudentService studentService;
+    @InjectMocks
+    private StudentServiceInt studentService;
 
-    @BeforeEach
-    void createMocks(){
-        studentsRepository = mock(StudentsRepository.class);
-
-        studentService =new StudentServiceInt(studentsRepository);
-    }
 
     @Test
-    void testSaveStudentUserActivateAndAssignAddressAndEncodeAndAssignPassword() {
+    void SaveStudentUserActivateAndAssignAddressAndEncodeAndAssignPassword() {
         //given
         String passwordBefore="test";
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -116,5 +119,7 @@ class StudentServiceIntTest {
         //then
         assertThrows(NoSuchUserExeptions.class,()->studentService.findLogInStudent());
     }
+
+
 
 }

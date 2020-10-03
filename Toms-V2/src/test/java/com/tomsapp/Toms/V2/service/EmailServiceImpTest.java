@@ -2,7 +2,7 @@ package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.entity.Student;
 import com.tomsapp.Toms.V2.entity.Token;
-import com.tomsapp.Toms.V2.repository.TokenRepository;
+import com.tomsapp.Toms.V2.session.BasketSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,13 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.TemplateEngine;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(NetworkInterface.class)
@@ -28,11 +28,13 @@ import static org.mockito.Mockito.*;
 class EmailServiceImpTest {
 
     private JavaMailSender javaMailSender;
+    private TemplateEngine templateEngine;
+        private BasketSession basketSession;
     private EmailServiceImp emailServiceImp;
     @BeforeEach
     void createMocks(){
         javaMailSender=mock(JavaMailSender.class);
-        emailServiceImp = new EmailServiceImp(javaMailSender);
+        emailServiceImp = new EmailServiceImp(javaMailSender,templateEngine,basketSession);
     }
 
 
@@ -45,7 +47,7 @@ class EmailServiceImpTest {
         Token token= new Token(student);
         student.setEmail(sampleMessage);
         token.setToken(sampleMessage);
-        emailServiceImp.sendConformationMessage(token);
+        emailServiceImp.sendConformationMessageLogin(token);
 
         //when
         ArgumentCaptor<SimpleMailMessage> argumentCaptor =ArgumentCaptor.forClass(SimpleMailMessage.class);

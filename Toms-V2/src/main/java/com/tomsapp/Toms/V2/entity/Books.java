@@ -1,11 +1,8 @@
 package com.tomsapp.Toms.V2.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +27,12 @@ public class Books {
     String status;
     String authors;
     String categories;
-    Integer totalNumber;
+    Integer availableQuantity;
+
+    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.EAGER,targetEntity = Borrow.class,mappedBy = "books")
+    List<Borrow> borrowList;
+
+
 
     public Books() {
     }
@@ -57,6 +59,18 @@ public class Books {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public void setAvailableQuantity(Integer availableQuantity) {
+        this.availableQuantity = availableQuantity;
+    }
+
+    public List<Borrow> getBorrowList() {
+        return borrowList;
+    }
+
+    public void setBorrowList(List<Borrow> borrowList) {
+        this.borrowList = borrowList;
     }
 
     public String getPageCount() {
@@ -123,13 +137,19 @@ public class Books {
         this.categories = categories;
     }
 
-    public Integer getTotalNumber() {
-        return totalNumber;
+    public Integer getAvailableQuantity() {
+        return availableQuantity;
     }
 
-    public void setTotalNumber(int totalNumber) {
-        this.totalNumber = totalNumber;
+    public void setAvailableQuantity(int totalNumber) {
+        this.availableQuantity = totalNumber;
     }
+
+    public  boolean isAvailable(){
+        return this.availableQuantity>0;
+    }
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -137,7 +157,6 @@ public class Books {
         if (o == null || getClass() != o.getClass()) return false;
         Books books = (Books) o;
         return id == books.id &&
-                totalNumber == books.totalNumber &&
                 Objects.equals(title, books.title) &&
                 Objects.equals(isbn, books.isbn) &&
                 Objects.equals(pageCount, books.pageCount) &&
@@ -152,24 +171,12 @@ public class Books {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, isbn, pageCount, publishedDate, thumbnailUrl, shortDescription, longDescription, status, authors, categories, totalNumber);
+        return Objects.hash(id, title, isbn, pageCount, publishedDate, thumbnailUrl, shortDescription, longDescription, status, authors, categories);
     }
 
     @Override
     public String toString() {
-        return "Books{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", pageCount='" + pageCount + '\'' +
-                ", publishedDate=" + publishedDate +
-                ", thumbnailUrl='" + thumbnailUrl + '\'' +
-                ", shortDescription='" + shortDescription + '\'' +
-                ", longDescription='" + longDescription + '\'' +
-                ", status='" + status + '\'' +
-                ", authors='" + authors + '\'' +
-                ", categories='" + categories + '\'' +
-                ", totalNumber=" + totalNumber +
-                '}';
+        return "Tile: " + title + "\n"+
+                "Author " + authors;
     }
 }

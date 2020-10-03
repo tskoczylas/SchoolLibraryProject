@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SelectEnumTest {
@@ -23,8 +22,8 @@ class SelectEnumTest {
          person = Sort.sort(Books.class);
 
          personByList=Arrays.asList(
-                person.by(Books::getTotalNumber).ascending(),
-                person.by(Books::getTotalNumber).descending(),
+                person.by(Books::getAvailableQuantity).ascending(),
+                person.by(Books::getAvailableQuantity).descending(),
                 person.by(Books::getAuthors).ascending(),
                 person.by(Books::getAuthors).descending(),
                 person.by(Books::getTitle).ascending(),

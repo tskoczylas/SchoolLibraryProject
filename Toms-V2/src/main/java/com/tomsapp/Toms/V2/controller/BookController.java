@@ -3,7 +3,7 @@ package com.tomsapp.Toms.V2.controller;
 import com.tomsapp.Toms.V2.enums.SelectEnum;
 import com.tomsapp.Toms.V2.session.BasketSession;
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.service.BooksServiceInt;
+import com.tomsapp.Toms.V2.service.BooksService;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import com.tomsapp.Toms.V2.session.PageSession;
 import org.springframework.data.domain.Page;
@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
 
 
-    BooksServiceInt booksService;
+    BooksService booksService;
     StudentServiceInt studentServiceInt;
     BasketSession basketSession;
     PageSession pageSession;
 
-    public BookController(BooksServiceInt booksService, StudentServiceInt studentServiceInt, BasketSession basketSession, PageSession pageSession) {
+    public BookController(BooksService booksService, StudentServiceInt studentServiceInt, BasketSession basketSession, PageSession pageSession) {
         this.booksService = booksService;
         this.studentServiceInt = studentServiceInt;
         this.basketSession = basketSession;
@@ -35,12 +35,12 @@ public class BookController {
     }
 
 
-    @GetMapping("/showbooks")
+    @GetMapping()
     public String showBooks(Model model,
-                            @ModelAttribute("dropCartEnum") String selectEnum  ,
-                            @RequestParam(value = "pageNumber",required = false) String currentPage,
-                            @RequestParam(value = "keywords",required = false) String keyword,
-                            @RequestParam(value = "maxPerPage",required = false) String pageSize)
+                            @ModelAttribute("selectEnum") String selectEnum  ,
+                            @RequestParam(value = "currentPage",required = false) String currentPage,
+                            @RequestParam(value = "keyword",required = false) String keyword,
+                            @RequestParam(value = "pageSize",required = false) String pageSize)
     {
 
         pageSession.setCurrentPageKeywordAndPageSize(currentPage,keyword,pageSize);
@@ -51,11 +51,10 @@ public class BookController {
 
 
         model.addAttribute("booksList",booksPage.get().collect(Collectors.toList()));
-        model.addAttribute("currentPage",pageSession.getCurrentPage());
+        model.addAttribute("pageSession",pageSession);
         model.addAttribute("lastPage", booksPage.getTotalPages()-1);
-        model.addAttribute("cartBooks", basketSession.getSelectBooks());
-        model.addAttribute("dropCartEnum", new ArrayList<>(Arrays.asList(SelectEnum.values())));
-        model.addAttribute("currentSelectDropList",pageSession.getSelectEnum());
+        model.addAttribute("basketSession", basketSession);
+        model.addAttribute("selectEnum", new ArrayList<>(Arrays.asList(SelectEnum.values())));
 
 
             return "book";
@@ -63,16 +62,15 @@ public class BookController {
 
 
 
-        @GetMapping(value = {"/addToCard","//addToCard","//checkout"})
-        public String addToCard(Model model,
-                @RequestParam(value = "bookId",required = false) String bookId,
+        @GetMapping(value = {"/add","//add"})
+        public String addToCard(@RequestParam(value = "bookId",required = false) String bookId,
                                 @RequestParam(value = "removeCartBookId",required = false) String removeCartBookId){
 
-                basketSession.addBookToBorrowList(bookId);
-                basketSession.removeBookFromCard(removeCartBookId);
+                basketSession.addBookToBasket(bookId);
+                basketSession.removeBookFromBasket(removeCartBookId);
 
 
-        return "redirect:/books/showbooks";
+        return "redirect:/book";
         }
 
 

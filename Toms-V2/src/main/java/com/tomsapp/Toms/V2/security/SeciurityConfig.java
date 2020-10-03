@@ -39,9 +39,10 @@ http.authorizeRequests().
                 formLogin().
                 loginPage("/login").permitAll().
                 failureUrl("/login-error").permitAll().
-
         and().
-                logout().permitAll();
+       logout().
+        logoutUrl("/logout").
+        permitAll();
 
     }
 

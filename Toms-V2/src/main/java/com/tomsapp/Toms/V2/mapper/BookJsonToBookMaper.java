@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.util.Random;
 
 @Component
@@ -40,7 +39,7 @@ public class BookJsonToBookMaper {
         mapBook.setShortDescription(bookDto.getShortDescription());
         mapBook.setStatus(bookDto.getStatus());
         mapBook.setThumbnailUrl(bookDto.getThumbnailUrl());
-        mapBook.setTotalNumber(random.nextInt(20));
+        mapBook.setAvailableQuantity(random.nextInt(20));
 
         return mapBook;
     }

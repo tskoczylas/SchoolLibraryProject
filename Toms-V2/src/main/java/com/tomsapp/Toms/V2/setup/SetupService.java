@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomsapp.Toms.V2.entity.*;
 import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.mapper.BookJsonToBookMaper;
-import com.tomsapp.Toms.V2.service.BooksService;
+import com.tomsapp.Toms.V2.service.BooksServiceImp;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 @Controller
 public class SetupService {
     private StudentServiceInt studentServiceInt;
-    private BooksService booksService;
+    private BooksServiceImp booksServiceImp;
     private BookJsonToBookMaper bookJsonToBookMaper;
 
-    public SetupService(StudentServiceInt studentServiceInt, BooksService booksService, BookJsonToBookMaper bookJsonToBookMaper) {
+    public SetupService(StudentServiceInt studentServiceInt, BooksServiceImp booksServiceImp, BookJsonToBookMaper bookJsonToBookMaper) {
         this.studentServiceInt = studentServiceInt;
 
-        this.booksService = booksService;
+        this.booksServiceImp = booksServiceImp;
         this.bookJsonToBookMaper = bookJsonToBookMaper;
     }
 
@@ -57,7 +57,7 @@ public class SetupService {
                 map(bookJsonToBookMaper::mapToBooks).collect(Collectors.toList());
 
 
-        booksService.saveBooksList(booksList);
+        booksServiceImp.saveBooksList(booksList);
     }
 
     public void CreateAdmin() {
@@ -71,24 +71,33 @@ public class SetupService {
         adminStudent.setPassword(bCryptPasswordEncoder.encode("admin"));
         adminStudent.setRole(Role.ROLE_ADMIN);
 
-        studentServiceInt.saveSrudent(adminStudent);
+        studentServiceInt.saveStudent(adminStudent);
 
 
     }
-
+    @PostConstruct
     public void CreateUser() {
         BCryptPasswordEncoder  bCryptPasswordEncoder =new BCryptPasswordEncoder();
 
        Student userStudent=new Student();
+        Adress adress = new Adress();
+        adress.setPostCode("34-333");
+        adress.setAddressFirstLine("Kopernika");
+        adress.setAddressSecondLine("Eastbourne");
+        adress.setTelephone("788888");
+        adress.setCountry("Uk");
+        adress.setAdressStudent(userStudent);
+        userStudent.setAdresses(adress);
+       userStudent.setId(1);
         userStudent.setEnabled(true);
-        userStudent.setEmail("email");
+        userStudent.setEmail("a@a.a");
+        userStudent.setFirstName("Tomasz");
+        userStudent.setLastName("Skoczylas");
+        userStudent.setPassword(bCryptPasswordEncoder.encode("aaa"));
 
-        userStudent.setFirstName("UserTomasz");
-        userStudent.setLastName("UserSkoczylas");
-        userStudent.setPassword(bCryptPasswordEncoder.encode("user"));
         userStudent.setRole(Role.ROLE_USER);
 
-        studentServiceInt.saveSrudent(userStudent);
+        studentServiceInt.saveStudent(userStudent);
 
 
     }

@@ -36,11 +36,11 @@ public class LoginServiceImp implements LoginService {
         Student student =
                 mapToStudentFromStudentAddressDto(studentAddressDto);
 
-        studentService.saveSrudent(student);
+        studentService.saveStudent(student);
 
           Token confirmationToken = new Token(student);
          tokenRepository.save(confirmationToken);
-        emailService.sendConformationMessage(confirmationToken);
+        emailService.sendConformationMessageLogin(confirmationToken);
 
     }
 
