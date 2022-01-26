@@ -13,12 +13,12 @@
     <span sec:authentication="name">Bob</span>
 
     <br>
-    <a class="btn btn-light" th:href="@{/students/list}"> Lista studentów </a>
+    <a class="btn btn-light" th:href="@{/student/list}"> Lista studentów </a>
     <br><br><br>
 
     <a class="btn btn-light" th:href="@{/books/showbooks}"> Lista ksiazek </a>
     <br><br><br>
-    <a  class="btn btn-light" th:href="@{/borrowing/list}"> Lista wypozyczen </a>
+    <a  class="btn btn-light" th:href="@{/borrow/list}"> Lista wypozyczen </a>
     <br><br><br>
     <div class="container" th:unless="${#lists.isEmpty(return)}">
 
@@ -30,7 +30,7 @@
                 <th>Days after</th>
             </tr>
             <tr th:each="borow:${return}">
-                <td th:text="*{borow.getValue().students}"></td>
+                <td th:text="*{borow.getValue().student}"></td>
                 <td th:text="*{borow.getValue().books}"></td>
                 <td th:text="*{borow.getKey().getDays()*-1}"></td>
 

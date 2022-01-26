@@ -1,10 +1,8 @@
 package com.tomsapp.Toms.V2.entity;
 
-import jdk.internal.instrumentation.InstrumentationMethod;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -13,35 +11,28 @@ import javax.validation.constraints.Size;
 public class Adress {
     @Id
      @GeneratedValue(strategy = GenerationType.IDENTITY)
-     @Column(name = "id")
-    int id;
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
-    @Column(name = "street")
-    private String adress;
+    private int id;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
-    @Column(name = "post_code")
+
+    private String addressFirstLine;
+
+
+    private String addressSecondLine;
+
+
     private String postCode;
 
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 15)
-    @Column(name = "country")
-    private String coutry;
-    @ManyToOne()
-    @JoinColumn(name = "student_id")
-    Students adressStudents;
 
-    public Adress(int id, @NonNull @NotBlank @Size(min = 5, max = 15) String adress, @NonNull @NotBlank @Size(min = 5, max = 15) String postCode, @NonNull @NotBlank @Size(min = 5, max = 15) String coutry, Students adressStudents) {
-        this.id = id;
-        this.adress = adress;
-        this.postCode = postCode;
-        this.coutry = coutry;
-        this.adressStudents = adressStudents;
+    private String country;
+
+
+    private String telephone;
+
+
+    @OneToOne
+    Student adressStudent;
+
+    public Adress() {
     }
 
     public int getId() {
@@ -52,15 +43,20 @@ public class Adress {
         this.id = id;
     }
 
-    public Adress() {
+    public String getAddressFirstLine() {
+        return addressFirstLine;
     }
 
-    public String getAdress() {
-        return adress;
+    public void setAddressFirstLine(String addressFirstLine) {
+        this.addressFirstLine = addressFirstLine;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public String getAddressSecondLine() {
+        return addressSecondLine;
+    }
+
+    public void setAddressSecondLine(String addressSecondLine) {
+        this.addressSecondLine = addressSecondLine;
     }
 
     public String getPostCode() {
@@ -71,19 +67,40 @@ public class Adress {
         this.postCode = postCode;
     }
 
-    public String getCoutry() {
-        return coutry;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCoutry(String coutry) {
-        this.coutry = coutry;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public Students getAdressStudents() {
-        return adressStudents;
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setAdressStudents(Students adressStudents) {
-        this.adressStudents = adressStudents;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public Student getAdressStudent() {
+        return adressStudent;
+    }
+
+    public void setAdressStudent(Student adressStudent) {
+        this.adressStudent = adressStudent;
+    }
+
+    @Override
+    public String toString() {
+        return "Adress{" +
+                "id=" + id +
+                ", addressFirstLine='" + addressFirstLine + '\'' +
+                ", addressSecondLine='" + addressSecondLine + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", country='" + country + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", adressStudent=" + adressStudent +
+                '}';
     }
 }

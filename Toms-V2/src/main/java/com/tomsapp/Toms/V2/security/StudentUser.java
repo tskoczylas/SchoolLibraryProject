@@ -1,62 +1,53 @@
 package com.tomsapp.Toms.V2.security;
 
-import com.tomsapp.Toms.V2.entity.Students;
+import com.tomsapp.Toms.V2.entity.Student;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StudentUser implements UserDetails {
 
-    private Students students;
+     Student student;
 
-    public StudentUser(Students students) {
-        this.students = students;
+    public StudentUser(Student student) {
+        this.student = student;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        List<SimpleGrantedAuthority> authorities =
-                students.
-                        getRolesSet().
-                        stream().
-                        map(s -> new SimpleGrantedAuthority(s.getRole().name())).
-                        collect(Collectors.toList());
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority(student.getRole().name()));
 
 
 
     }
 
-    public Students getStudents() {
-        return students;
+    public Student getStudent() {
+        return student;
     }
 
 
 
     @Override
     public String getPassword() {
-        return students.getPassword();
+        return student.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return students.getEmail();
+        return student.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
+
 
     @Override
     public boolean isAccountNonLocked() {
@@ -70,6 +61,6 @@ public class StudentUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return students.isEnabled();
+        return true;
     }
 }

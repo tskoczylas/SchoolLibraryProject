@@ -1,94 +1,78 @@
 package com.tomsapp.Toms.V2.controller;
 
+import com.tomsapp.Toms.V2.enums.SelectEnum;
+import com.tomsapp.Toms.V2.session.BasketSession;
 import com.tomsapp.Toms.V2.entity.Books;
-import com.tomsapp.Toms.V2.entity.Students;
-import com.tomsapp.Toms.V2.service.BooksServiceInt;
-import com.tomsapp.Toms.V2.service.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tomsapp.Toms.V2.service.BooksService;
+import com.tomsapp.Toms.V2.service.StudentServiceInt;
+import com.tomsapp.Toms.V2.session.PageSession;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
 
-    @Autowired
-    BooksServiceInt booksService;
-    @Autowired
-    StudentService studentService;
 
+    BooksService booksService;
+    StudentServiceInt studentServiceInt;
+    BasketSession basketSession;
+    PageSession pageSession;
 
-    @GetMapping("/showbooks")
-    public String showBooks(Model model) {
-        model.addAttribute("shbooks", booksService.getBooks());
-
-
-        return "showBookForm";
-    }
-
-    @GetMapping("/add")
-    public String addBooks(Model model) {
-
-        Books books = new Books();
-        List<Students> students = studentService.getStudents();
-
-        model.addAttribute("booksadd", books);
-
-        model.addAttribute("shstudents", students);
-
-        return "addBookForm";
+    public BookController(BooksService booksService, StudentServiceInt studentServiceInt, BasketSession basketSession, PageSession pageSession) {
+        this.booksService = booksService;
+        this.studentServiceInt = studentServiceInt;
+        this.basketSession = basketSession;
+        this.pageSession = pageSession;
     }
 
 
-    @GetMapping("/deletebooks")
-    public String deleteBooks(@RequestParam("booksId") int bookId) {
+    @GetMapping()
+    public String showBooks(Model model,
+                            @ModelAttribute("selectEnum") String selectEnum  ,
+                            @RequestParam(value = "currentPage",required = false) String currentPage,
+                            @RequestParam(value = "keyword",required = false) String keyword,
+                            @RequestParam(value = "pageSize",required = false) String pageSize)
+    {
 
-        booksService.deleeteBookById(bookId);
+        pageSession.setCurrentPageKeywordAndPageSize(currentPage,keyword,pageSize);
+        if (keyword!=null) pageSession.refreshPage();
+        pageSession.sortBy(selectEnum);
 
-        System.out.println(bookId);
-
-
-        return "redirect:/books/showbooks";
-    }
-
-    @PostMapping("/save")
-    public String saveBooks(@ModelAttribute() Books books) {
-        booksService.saveBooks(books);
-
-
-        return "redirect:/books/showbooks";
-    }
-
-    @GetMapping("/update")
-    public String updateBooks(@RequestParam("booksId") int bookId, Model model) {
-        List<Students> students = studentService.getStudents();
+        Page<Books> booksPage = booksService.findAllOrFindByKeyword();
 
 
-        model.addAttribute("shstudents", students);
-
-        Books books = booksService.getbooById(bookId);
-
-        model.addAttribute("booksadd", books);
-
-        return "addBookForm";
-    }
-
-    @GetMapping("/shearch")
-    public String searchBooks(@RequestParam("searchField") String searchField, Model model) {
+        model.addAttribute("booksList",booksPage.get().collect(Collectors.toList()));
+        model.addAttribute("pageSession",pageSession);
+        model.addAttribute("lastPage", booksPage.getTotalPages()-1);
+        model.addAttribute("basketSession", basketSession);
+        model.addAttribute("selectEnum", new ArrayList<>(Arrays.asList(SelectEnum.values())));
 
 
-        List<Books> searchingLis = booksService.searchByTitleorAutorOrIbns(searchField);
-        System.out.println(searchingLis);
+            return "book";
+        }
 
-        {
-            model.addAttribute("shbooks", searchingLis);
 
-            return "showBookForm";
+
+        @GetMapping(value = {"/add","//add"})
+        public String addToCard(@RequestParam(value = "bookId",required = false) String bookId,
+                                @RequestParam(value = "removeCartBookId",required = false) String removeCartBookId){
+
+                basketSession.addBookToBasket(bookId);
+                basketSession.removeBookFromBasket(removeCartBookId);
+
+
+        return "redirect:/book";
         }
 
 
     }
-}
+
