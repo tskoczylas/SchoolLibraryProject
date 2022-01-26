@@ -5,6 +5,7 @@ import com.tomsapp.Toms.V2.entity.Borrow;
 import com.tomsapp.Toms.V2.entity.Token;
 import com.tomsapp.Toms.V2.mapper.BorrowMapper;
 import com.tomsapp.Toms.V2.session.BasketSession;
+import com.tomsapp.Toms.V2.utils.HostUtils;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static com.tomsapp.Toms.V2.utils.HostUtils.getHost;
 
 @Service
 public class EmailServiceImp implements EmailService {
@@ -49,26 +52,7 @@ public class EmailServiceImp implements EmailService {
 
 }
 
-    @Override
-    public void sendConformationMessageNewOrder4(Borrow borrow){
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(borrow.getStudent().getEmail());
-        mailMessage.setSubject( "Borrow number " + borrow.getId() +  "change status to " + borrow.getBorrowStatusEnum() );
-
-
-        String text =
-                "Dear " + borrow.getStudent().getFirstName() + " " + borrow.getStudent().getLastName()+ "\n" + "\n"
-                + "Your borrow number " + borrow.getId() + " changed status to " + borrow.getBorrowStatusEnum() + "." + "\n" +"\n"
-                + "You borrowed books: " + "\n"
-                + borrow.getBooks() +"\n" + "\n"
-                + "Period of borrows: " + borrow.getBorrowPeriodEnum().getDays() + " ." +"\n"
-                + "Cost per day: " + borrow.getBorrowPeriodEnum().getTotalCost() + " ." + "\n"
-                + "Total cost: " + borrow.getBorrowPeriodEnum().getTotalCost() + " .";
-
-        mailMessage.setText(text);
-
-        javaMailSender.send(mailMessage);}
 
     public String build(BorrowDto borrowDto) {
         Context context = new Context();
@@ -78,15 +62,14 @@ public class EmailServiceImp implements EmailService {
 
 
     @Override
-    public void sendConformationMessageNewOrder(Borrow borrow) {
-        BorrowDto borrowDtoMap = BorrowMapper.mapToBorrowDtoFromBorrow(borrow);
+    public void sendConformationMessageNewOrder(BorrowDto borrow) {
 
 
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setTo( borrowDtoMap.getStudent().getEmail());
-            messageHelper.setSubject("Sample mail subject");
-            String content = build(borrowDtoMap);
+            messageHelper.setTo( borrow.getStudent().getEmail());
+            messageHelper.setSubject("Order number: " + borrow.getId() + " change status to " + borrow.getBorrowStatusEnum());
+            String content = build(borrow);
             messageHelper.setText(content, true);
         };
         try {
@@ -99,18 +82,5 @@ public class EmailServiceImp implements EmailService {
 
 
 
-    @Override
-    public   String getHost(){
-        String hostAddress;
-        try {
-            hostAddress = NetworkInterface.
-                    getNetworkInterfaces().
-                    nextElement().getInetAddresses().
-                    nextElement().getHostAddress();
-        } catch (SocketException e) {
-            hostAddress="unknown";
-        }
 
-        return hostAddress;
-    }
 }

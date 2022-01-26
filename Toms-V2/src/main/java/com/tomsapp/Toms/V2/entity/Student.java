@@ -25,6 +25,9 @@ public class Student {
     @OneToOne(mappedBy = "adressStudent",cascade = CascadeType.ALL)
    private Adress adresses;
 
+    @OneToMany(targetEntity = Borrow.class,cascade = CascadeType.ALL,mappedBy = "student")
+    List<Borrow> studentsBorrows;
+
 
 
 
@@ -108,6 +111,14 @@ public class Student {
         this.adresses = adresses;
     }
 
+    public List<Borrow> getStudentsBorrows() {
+        return studentsBorrows;
+    }
+
+    public void setStudentsBorrows(List<Borrow> studentsBorrows) {
+        this.studentsBorrows = studentsBorrows;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,15 +134,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", isEnabled=" + isEnabled +
-                ", rolesSet="  +
-                ", adresses=" + adresses +
-                '}';
+        return getFirstName() + " " + getLastName();
     }
 }

@@ -2,7 +2,7 @@ package com.tomsapp.Toms.V2.enums;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
+import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -46,4 +46,31 @@ class BorrowPeriodEnumTest {
 
 
     }
+
+    @Test
+    void countBorrowDaysLeftFromShouldReturnDaysLeftWhenProvideDateIsAfterNow(){
+        //given
+        BorrowPeriodEnum borrowPeriodEnumMIN = BorrowPeriodEnum.MIN;
+        //when
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(20);
+        int i = borrowPeriodEnumMIN.countBorrowDaysLeftFrom(localDateTime);
+
+        //then
+       assertThat(i,is(borrowPeriodEnumMIN.days-20));
+
+    }
+    @Test
+    void countBorrowDaysLeftFromShouldReturnOWhenShipingDateIsAfterNow(){
+        //given
+        BorrowPeriodEnum borrowPeriodEnumMIN = BorrowPeriodEnum.MIN;
+        //when
+        LocalDateTime localDateTime = LocalDateTime.now().plusDays(20).plusMinutes(1);
+        int i = borrowPeriodEnumMIN.countBorrowDaysLeftFrom(localDateTime);
+
+        //then
+        assertThat(i,is(0));
+
+    }
+
+
 }

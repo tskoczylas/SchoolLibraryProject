@@ -1,6 +1,7 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.dto.StudentAddressDto;
+import com.tomsapp.Toms.V2.dto.StudentAddressEditDto;
 import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.entity.Student;
@@ -19,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.mapToStudentAddressDtoFromStudent;
+import static com.tomsapp.Toms.V2.mapper.StudentAddressEditMapper.mapToAddressFromStudentAddressEditDto;
+import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.*;
 
 @Service
 public class StudentServiceInt implements StudentService {
@@ -33,15 +35,10 @@ public class StudentServiceInt implements StudentService {
 
 
 
-
-
-
     @Override
     public void saveStudent(Student tempStudent) {
         studentsRepository.save(tempStudent);
     }
-
-
 
 
     @Override
@@ -51,8 +48,6 @@ public class StudentServiceInt implements StudentService {
         return studentsRepository.
                 findStudentForSecurity(emailOrUsername).orElseGet(Student::new);
     }
-
-
 
 
     @Override
@@ -88,6 +83,22 @@ public class StudentServiceInt implements StudentService {
                     orElseThrow(NoSuchUserExeptions::new);}
         else throw new  NoSuchUserExeptions();
     }
+
+
+    @Override
+    public void  editStudentAndAddress(StudentAddressEditDto studentAddressEditDto){
+
+        if(studentAddressEditDto.getAddressId()!=0 ){
+        Adress adress = mapToAddressFromStudentAddressEditDto(studentAddressEditDto);
+        Student logInStudent = findLogInStudent();
+        logInStudent.setAdresses(adress);
+        logInStudent.setFirstName(studentAddressEditDto.getFirstName());
+        logInStudent.setLastName(studentAddressEditDto.getLastName());
+        adress.setAdressStudent(logInStudent);
+        studentsRepository.save(logInStudent);}
+        else
+            throw new IllegalArgumentException();
+}
 
 
 }

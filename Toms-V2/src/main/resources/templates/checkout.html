@@ -11,6 +11,7 @@
     <!-- Title -->
     <title>..:: LIBRARIA ::..</title>
 
+
     <!-- Favicon -->
     <link th:href="@{/images/favicon.ico}" rel="icon" type="image/x-icon" />
 
@@ -35,6 +36,8 @@
     <!--[if lt IE 9]>
     <script th:src="@{/js/html5shiv.min.js}"></script>
     <script th:src="@{/js/respond.min.js}"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AeZG-IjC40rfRDitdbNnwqhs2vFP_UBfB7b4nuDBi_iiMQtglLCLktHtapoWRovLeYitw2XQkrY-bhQh"></script>
+
 
     <![endif]-->
 
@@ -279,7 +282,7 @@
 
 
 
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-5">
                                                     <h2>Your cart</h2>
                                                     <span class="underline left"></span>
                                                     <div class="woocommerce-checkout-review-order" id="order_review">
@@ -333,8 +336,8 @@
 
                                                     </div>
                                                 </div>
-                                                <form th:action="@{/cart/save}" th:object="${logInStudent}" class="checkout woocommerce-checkout" method="post" name="checkout">
 
+                                                <form th:action="@{/cart/save}" th:object="${logInStudent}" class="checkout woocommerce-checkout" method="post" name="checkout">
                                                 <div id="customer_details">
                                                     <div class="col-xs-12 col-sm-6">
 
@@ -403,19 +406,34 @@
                                                             </div>
                                                             <div class="clear"></div>
                                                         </div>
-                                                       <a th:if="${basketSession.selectBooks.size()!=0}" th:href="@{/process(value=true)}"  id="place_order" text="Process" class="button alt btn btn-default"> Place order and pay </a>
-                                                            <br><br>
+
+                                                        <div id="paypal-button-container"></div>
+
                                                     </div>
-
-
-                                                    <div class="clearfix"></div>
                                                 </div>
+                                                    <div class="col-xs-12 col-sm-4">
+                                                        <div class="woocommerce-checkout-payment" id="payment">
+                                                            <h2>Payment Method</h2>
+                                                            <span class="underline left"></span>
+                                                            <div class="form-row place-order">
+                                                                <div class="radio">
+
+                                                                    <span id="paypal" type="radio" value="paypal" name="ship-address" > </span>
+                                                                    <label for="paypal"><strong>Paypal</strong>
+
+                                                                        <span><a href="#"><img th:src="@{images/cart/payment-paypal.jpg}" alt=""></a></span>
+
+                                                                    </label>
+                                                                </div>
+                                                                <a th:if="${basketSession.selectBooks.size()!=0}" th:href="@{/process(value=true)}"  name="woocommerce_checkout_place_order" class="button alt btn btn-default"> Place order and pay </a>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
                                     </div>
-
-                                        </form>
-
                                 </div>
-                                </div><!-- .entry-content -->
                             </article>
                         </div>
                     </div>

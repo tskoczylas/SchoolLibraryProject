@@ -86,6 +86,10 @@ public class BasketSession {
         borrowPeriodEnum = values[0];
     }
 
+    public boolean isEmpty(){
+        return selectBooks.size()==0;
+    }
+
 
     public void removeBookFromBasket(String removeCartBookId) {
         booksService.
@@ -103,9 +107,6 @@ public class BasketSession {
             selectBooks.forEach(books -> booksService.inceaseAvailableBookQuantity(books));
         }
 }
-
-
-
 
 
 }

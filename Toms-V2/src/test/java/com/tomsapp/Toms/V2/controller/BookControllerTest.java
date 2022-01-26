@@ -47,8 +47,7 @@ class BookControllerTest {
     private BookController bookController;
 
     private MockMvc mockMvc;
-    final String sampleEmail="sample@sample.pl";
-    final String secondSampleEmail ="notsample@sample.pl";
+
 
     @BeforeEach
     public void setup(){

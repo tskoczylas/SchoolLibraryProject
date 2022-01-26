@@ -220,19 +220,11 @@
 
                                                             <span class="underline left"></span>
                                                             <br><br>
-                                                           <h5> <a class="text c-dark"> Email:</a></h5>
-                                                            <h4> <a  th:text="*{studentAddressDto.email}" class="text c-dark"  ></a> </h4>
-                                                            <br><br>
+
                                                         </div>
                                                         <form  th:action="@{/edit_data}" th:object="${studentAddressDto}" class="login" method="post">
-                                                            <input type="hidden" th:field="*{email}"> </input>
-                                                            <input type="hidden" th:field="*{studentId}"> </input>
+
                                                             <input type="hidden" th:field="*{addressId}"> </input>
-                                                            <input type="hidden" th:field="*{password}"> </input>
-
-
-
-
 
                                                             <label>
                                                                 <span class="first-letter">Fist name</span>

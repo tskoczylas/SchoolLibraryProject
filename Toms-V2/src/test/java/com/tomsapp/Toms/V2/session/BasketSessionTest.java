@@ -290,5 +290,26 @@ class BasketSessionTest {
 
     }
 
+    @Test
+    void isEmptyReturnTrueWhenSelectBooksEmpty() {
+        //given
+        basketSession.selectBooks = new ArrayList<>();
+        //when
+        //then
+        assertTrue(basketSession.isEmpty());
+
+    }
+    @Test
+    void isEmptyReturnFlaseWhenSelectBooksNotEmpty() {
+        //given
+        basketSession.selectBooks = new ArrayList<>();
+        basketSession.selectBooks.add(new Books());
+        //when
+        //then
+        assertFalse(basketSession.isEmpty());
+    }
+
+
+
 
 }

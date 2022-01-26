@@ -18,4 +18,7 @@ public interface StudentsRepository extends JpaRepository<Student, Integer> {
 @Query(value = "select u from Student u where u.email like :key")
     Optional<Student> findStudentForSecurity(@Param("key") String emailOrUsername);
 
+
+
+
 }

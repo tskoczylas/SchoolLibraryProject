@@ -1,6 +1,7 @@
 package com.tomsapp.Toms.V2.service;
 
 import com.tomsapp.Toms.V2.dto.StudentAddressDto;
+import com.tomsapp.Toms.V2.dto.StudentAddressEditDto;
 import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Student;
 
@@ -23,4 +24,6 @@ public interface StudentService {
     void saveStudentUserActivateAndAssignAddress(Student student, Adress adress);
 
     Student findLogInStudent();
+
+    void  editStudentAndAddress(StudentAddressEditDto studentAddressEditDto);
 }

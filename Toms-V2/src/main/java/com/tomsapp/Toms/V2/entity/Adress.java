@@ -28,6 +28,7 @@ public class Adress {
 
     private String telephone;
 
+
     @OneToOne
     Student adressStudent;
 

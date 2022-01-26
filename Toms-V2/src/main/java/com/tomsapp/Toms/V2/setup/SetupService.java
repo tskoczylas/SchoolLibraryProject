@@ -90,9 +90,9 @@ public class SetupService {
         userStudent.setAdresses(adress);
        userStudent.setId(1);
         userStudent.setEnabled(true);
-        userStudent.setEmail("a@a.a");
-        userStudent.setFirstName("Tomasz");
-        userStudent.setLastName("Skoczylas");
+        userStudent.setEmail("t.skoczylas1@gmail.com");
+        userStudent.setFirstName("Adam");
+       userStudent.setLastName("Walny");
         userStudent.setPassword(bCryptPasswordEncoder.encode("aaa"));
 
         userStudent.setRole(Role.ROLE_USER);

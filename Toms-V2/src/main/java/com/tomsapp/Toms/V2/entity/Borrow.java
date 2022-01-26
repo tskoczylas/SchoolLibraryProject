@@ -2,6 +2,7 @@ package com.tomsapp.Toms.V2.entity;
 
 import com.tomsapp.Toms.V2.enums.BorrowPeriodEnum;
 import com.tomsapp.Toms.V2.enums.BorrowStatusEnum;
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+
 public class Borrow {
 
 
@@ -17,23 +19,77 @@ public class Borrow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    LocalDateTime shipmentDate;
+    String shipmentNumber;
+
+    LocalDateTime shipmentReturnDate;
+    String shipmentReturnNumber;
+
+    double totalCost;
+    int daysBorrow;
+    double pricePerItem;
+    double overDueFee;
+
+    LocalDateTime startBorrowDate;
+    LocalDateTime endBorrowDate;
+
+    String payPalPaymentId;
+
+
 
     @CreationTimestamp
     private LocalDateTime createdDate;
     @Enumerated(value = EnumType.STRING)
-    private BorrowPeriodEnum borrowPeriodEnum;
-    @Enumerated(value = EnumType.STRING)
     private BorrowStatusEnum borrowStatusEnum;
 
-    @OneToOne(cascade = CascadeType.MERGE, targetEntity = Student.class)
+    @ManyToOne(cascade = CascadeType.DETACH, targetEntity = Student.class)
     private   Student student;
 
-    @ManyToMany(cascade = CascadeType.MERGE, targetEntity = Books.class)
+    @ManyToMany(cascade = CascadeType.DETACH, targetEntity = Books.class)
     private List<Books> books;
 
     public Borrow() {
     }
 
+    public LocalDateTime getShipmentDate() {
+        return shipmentDate;
+    }
+
+    public void setShipmentDate(LocalDateTime shipmentDate) {
+        this.shipmentDate = shipmentDate;
+    }
+
+    public String getShipmentNumber() {
+        return shipmentNumber;
+    }
+
+    public void setShipmentNumber(String shipmentNumber) {
+        this.shipmentNumber = shipmentNumber;
+    }
+
+    public LocalDateTime getShipmentReturnDate() {
+        return shipmentReturnDate;
+    }
+
+    public void setShipmentReturnDate(LocalDateTime shipmentReturnDate) {
+        this.shipmentReturnDate = shipmentReturnDate;
+    }
+
+    public String getShipmentReturnNumber() {
+        return shipmentReturnNumber;
+    }
+
+    public void setShipmentReturnNumber(String shipmentReturnNumber) {
+        this.shipmentReturnNumber = shipmentReturnNumber;
+    }
+
+    public LocalDateTime getEndBorrowDate() {
+        return endBorrowDate;
+    }
+
+    public void setEndBorrowDate(LocalDateTime endBorrowDate) {
+        this.endBorrowDate = endBorrowDate;
+    }
 
     public int getId() {
         return id;
@@ -51,13 +107,6 @@ public class Borrow {
         this.createdDate = createdDate;
     }
 
-    public BorrowPeriodEnum getBorrowPeriodEnum() {
-        return borrowPeriodEnum;
-    }
-
-    public void setBorrowPeriodEnum(BorrowPeriodEnum borrowPeriodEnum) {
-        this.borrowPeriodEnum = borrowPeriodEnum;
-    }
 
     public Student getStudent() {
         return student;
@@ -79,7 +128,45 @@ public class Borrow {
         return borrowStatusEnum;
     }
 
+    public double getTotalCost() {
+        return totalCost;
+    }
 
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public int getDaysBorrow() {
+        return daysBorrow;
+    }
+
+    public String getPayPalPaymentId() {
+        return payPalPaymentId;
+    }
+
+    public void setPayPalPaymentId(String payPalPaymentId) {
+        this.payPalPaymentId = payPalPaymentId;
+    }
+
+    public double getOverDueFee() {
+        return overDueFee;
+    }
+
+    public void setOverDueFee(double overDueFee) {
+        this.overDueFee = overDueFee;
+    }
+
+    public void setDaysBorrow(int daysBorrow) {
+        this.daysBorrow = daysBorrow;
+    }
+
+    public double getPricePerItem() {
+        return pricePerItem;
+    }
+
+    public void setPricePerItem(double pricePerItem) {
+        this.pricePerItem = pricePerItem;
+    }
 
     public void setBorrowStatusEnum(BorrowStatusEnum borrowStatusEnum) {
         this.borrowStatusEnum = borrowStatusEnum;
@@ -92,22 +179,37 @@ public class Borrow {
         Borrow borrow = (Borrow) o;
         return id == borrow.id &&
                 Objects.equals(createdDate, borrow.createdDate) &&
-                borrowPeriodEnum == borrow.borrowPeriodEnum &&
                 Objects.equals(student, borrow.student) &&
                 Objects.equals(books, borrow.books);
     }
 
+    public LocalDateTime getStartBorrowDate() {
+        return startBorrowDate;
+    }
+
+    public void setStartBorrowDate(LocalDateTime startBorrowDate) {
+        this.startBorrowDate = startBorrowDate;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, createdDate, borrowPeriodEnum, student, books);
+        return Objects.hash(id, createdDate, student, books);
     }
 
     @Override
     public String toString() {
         return "Borrow{" +
                 "id=" + id +
+                ", shipmentDate=" + shipmentDate +
+                ", shipmentNumber='" + shipmentNumber + '\'' +
+                ", shipmentReturnDate=" + shipmentReturnDate +
+                ", shipmentReturnNumber='" + shipmentReturnNumber + '\'' +
+                ", totalCost=" + totalCost +
+                ", daysBorrow=" + daysBorrow +
+                ", pricePerItem=" + pricePerItem +
+                ", startBorrowDate=" + startBorrowDate +
                 ", createdDate=" + createdDate +
-                ", borrowPeriodEnum=" + borrowPeriodEnum +
+                ", borrowStatusEnum=" + borrowStatusEnum +
                 ", student=" + student +
                 ", books=" + books +
                 '}';

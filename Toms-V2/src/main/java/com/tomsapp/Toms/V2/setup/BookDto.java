@@ -2,7 +2,6 @@ package com.tomsapp.Toms.V2.setup;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

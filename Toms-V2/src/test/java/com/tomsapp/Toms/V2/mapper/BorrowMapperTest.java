@@ -29,4 +29,19 @@ class BorrowMapperTest {
         assertEquals(borrowDto.getBooks(),anyList());
         assertEquals(borrowDto.getStudent(),any(Student.class));
     }
+    @Test
+    void mapToBorrowFromBorrowDto(){
+        BorrowDto borrowDto  = new BorrowDto();
+        borrowDto.setId(4);
+        borrowDto.setBooks(anyList());
+        borrowDto.setStudent(any(Student.class));
+        //when
+        Borrow borrow = BorrowMapper.mapToBorrowFromBorrowDto(borrowDto);
+        //then
+        assertEquals(borrow.getId(),4);
+        assertEquals(borrow.getBooks(),anyList());
+        assertEquals(borrow.getStudent(),any(Student.class));
+
+    }
+
 }

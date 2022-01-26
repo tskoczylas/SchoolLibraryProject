@@ -273,16 +273,14 @@
                                     <div class="filter-options margin-list">
                                         <div class="row">
                                             <div class="col-md-4 col-sm-4">
-                                                <form id="form" th:action="@{/book}" th:object="${selectEnum}" method="get">
-                                                <select  id="selectEnum" name="selectEnum">
-                                                    <option  th:each="i : ${selectEnum}"
-                                                             th:value="${i}" th:text="${i.description}">
-                                                    </option>
+                                                <div class="dropdown">
+                                                   <h3><a href="#" data-toggle="dropdown" class="dropdown-toggle">Sort by <b class="caret"></b></a></h3>
+                                                    <ul  class="dropdown-menu">
+                                                        <li th:each="i : ${selectEnum}" ><a th:text="${i.description}" th:href="@{/book(selectEnum=${i})}">Edit Hold</a></li>
+                                                    </ul>
+                                                </div>
 
 
-                                                </select>
-                                                    <input   type="submit" value="Sort"/>
-                                                </form>
                                             </div>
 
 
