@@ -48,7 +48,7 @@ public class SetupService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<BookDto> bookDto =
-                objectMapper.readValue(new File("Toms-V2/listOfExampleBooks.json"),
+                objectMapper.readValue(new File("../Toms-V2/listOfExampleBooks.json"),
                         objectMapper.getTypeFactory().
                                 constructCollectionType(List.class, BookDto.class));
 
