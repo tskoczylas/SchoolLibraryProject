@@ -25,7 +25,7 @@ public class BorrowSchedule {
     }
 
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 2000000)
 
     public void setBorrow() {
         borrowRepository.findBorrowForSetBorrowed(BorrowStatusEnum.SENT,LocalDateTime.now().minusDays(daleyDaysAfterShipment)).
@@ -42,7 +42,7 @@ public class BorrowSchedule {
                      });}
 
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 2000000)
     public void findOverDue() {
         borrowRepository.findBorrowForOverDue(BorrowStatusEnum.BORROWED,LocalDateTime.now()).ifPresent(
                 borrows -> {

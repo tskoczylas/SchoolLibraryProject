@@ -1,14 +1,14 @@
 package com.tomsapp.Toms.V2.controller;
 
-import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.PaymentExecution;
-import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import com.paypal.http.HttpResponse;
+import com.paypal.orders.LinkDescription;
+import com.paypal.orders.Order;
 import com.tomsapp.Toms.V2.dto.BorrowDto;
 import com.tomsapp.Toms.V2.entity.Borrow;
 import com.tomsapp.Toms.V2.enums.BorrowStatusEnum;
-import com.tomsapp.Toms.V2.paypal.PaypalContex;
 import com.tomsapp.Toms.V2.paypal.PaypalService;
 import com.tomsapp.Toms.V2.repository.BorrowRepository;
 import com.tomsapp.Toms.V2.service.BorrowService;
@@ -16,17 +16,22 @@ import com.tomsapp.Toms.V2.service.EmailService;
 import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.session.BasketSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.Optional;
 import static com.tomsapp.Toms.V2.utils.Message.createMessageMap;
 import static com.tomsapp.Toms.V2.utils.Message.createMessageMap2Links;
 
 @Controller
 public class PaymentController {
+
+    @Value("${host.name}")
+    String hostName;
 
    protected BasketSession basketSession;
     protected StudentService studentService;
@@ -64,15 +69,14 @@ public class PaymentController {
             BorrowDto borrowDto = borrowService.saveBorrowDto(borrowService.createBorrow().get());
             try {
 
-                Payment payment = paypalService.createPayment(borrowDto,successPaypalUrl,cancelPaypalUrl);
+                HttpResponse<Order> response = paypalService.createPaymentHttpRes(borrowDto,hostName +successPaypalUrl,hostName +cancelPaypalUrl);
                 String successHref=null;
-                if(payment!=null ){
-                    for (Links link : payment.getLinks()) {
-                        if(link.getRel().equals("approval_url")){
-                            successHref=link.getHref();}
+                if(response!=null ){
+                    for (LinkDescription link : response.result().links()) {
+                        if(link.rel().equals("approve")){
+                            successHref=link.href();}
                     }
-
-                    borrowDto.setPayPalPaymentId(payment.getId());
+                    borrowDto.setPayPalPaymentId(response.result().id());
                     borrowService.saveBorrowDto(borrowDto);
                     emailService.sendConformationMessageNewOrder(borrowDto);
                     basketSession.cleanBooksBasket();
@@ -80,7 +84,7 @@ public class PaymentController {
 
                     return "redirect:"+ successHref;
                 }
-            } catch (PayPalRESTException e) {
+            } catch (Exception e) {
                 System.out.println(e);
 
                 return "redirect:" + cancelPaypalUrl + "?borrowId="+borrowDto.getId();
@@ -149,9 +153,10 @@ public class PaymentController {
 
     @GetMapping(successPaypalUrl)
     public String paymentSecces(Model model,@RequestParam(value = "borrowDays", required = false) String borrowDays,
-                                @RequestParam(value = "bookId", required = false) String removeFromBaske,@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+                                @RequestParam(value = "bookId", required = false) String removeFromBaske,@RequestParam("token") String paymentId, @RequestParam("PayerID") String payerId) {
 
         try {
+            System.out.println("token " + paymentId + "user " + payerId);
             Payment payment = paypalService.executePayment(paymentId, payerId);
 
             Optional<Borrow> optionalBorrow = borrowRepository.findBorrowsByPayPalPaymentId(payment.getId());

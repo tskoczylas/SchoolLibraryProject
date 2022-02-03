@@ -3,9 +3,7 @@ package com.tomsapp.Toms.V2.service;
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.repository.BooksRepository;
 import com.tomsapp.Toms.V2.session.PageSession;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +57,9 @@ public class BooksServiceImp implements BooksService {
     @Override
     public void saveBooksList(
             List<Books> booksList) {
-        booksRepository.saveAll(booksList);
+
+        if(!booksRepository.existsById(6)){
+        booksRepository.saveAll(booksList);}
     }
 
     @Override

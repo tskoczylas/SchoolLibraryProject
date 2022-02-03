@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomsapp.Toms.V2.entity.*;
 import com.tomsapp.Toms.V2.enums.Role;
 import com.tomsapp.Toms.V2.mapper.BookJsonToBookMaper;
+import com.tomsapp.Toms.V2.repository.StudentsRepository;
 import com.tomsapp.Toms.V2.service.BooksServiceImp;
 import com.tomsapp.Toms.V2.service.StudentServiceInt;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +25,13 @@ public class SetupService {
     private StudentServiceInt studentServiceInt;
     private BooksServiceImp booksServiceImp;
     private BookJsonToBookMaper bookJsonToBookMaper;
+    private StudentsRepository studentsRepository;
 
-    public SetupService(StudentServiceInt studentServiceInt, BooksServiceImp booksServiceImp, BookJsonToBookMaper bookJsonToBookMaper) {
+    public SetupService(StudentServiceInt studentServiceInt, BooksServiceImp booksServiceImp, BookJsonToBookMaper bookJsonToBookMaper, StudentsRepository studentsRepository) {
         this.studentServiceInt = studentServiceInt;
-
         this.booksServiceImp = booksServiceImp;
         this.bookJsonToBookMaper = bookJsonToBookMaper;
+        this.studentsRepository = studentsRepository;
     }
 
     @Value("${value.admin.login}")
@@ -48,7 +50,7 @@ public class SetupService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         List<BookDto> bookDto =
-                objectMapper.readValue(new File("../Toms-V2/listOfExampleBooks.json"),
+                objectMapper.readValue(new File("./listOfExampleBooks.json"),
                         objectMapper.getTypeFactory().
                                 constructCollectionType(List.class, BookDto.class));
 
@@ -97,7 +99,11 @@ public class SetupService {
 
         userStudent.setRole(Role.ROLE_USER);
 
-        studentServiceInt.saveStudent(userStudent);
+
+
+        if(studentsRepository.findStudentsByNameorSurname("Adam").isEmpty())
+        {studentServiceInt.saveStudent(userStudent);}
+
 
 
     }

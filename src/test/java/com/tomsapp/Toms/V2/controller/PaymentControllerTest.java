@@ -1,64 +1,28 @@
 package com.tomsapp.Toms.V2.controller;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
-import com.paypal.base.rest.APIContext;
-import com.tomsapp.Toms.V2.TomsV2Application;
 import com.tomsapp.Toms.V2.dto.BorrowDto;
-import com.tomsapp.Toms.V2.dto.StudentAddressDto;
 import com.tomsapp.Toms.V2.entity.Adress;
 import com.tomsapp.Toms.V2.entity.Books;
 import com.tomsapp.Toms.V2.entity.Student;
-import com.tomsapp.Toms.V2.mapper.BorrowMapper;
-import com.tomsapp.Toms.V2.paypal.PaypalContex;
 import com.tomsapp.Toms.V2.paypal.PaypalService;
 import com.tomsapp.Toms.V2.repository.BorrowRepository;
 import com.tomsapp.Toms.V2.service.BorrowService;
 import com.tomsapp.Toms.V2.service.EmailService;
 import com.tomsapp.Toms.V2.service.StudentService;
 import com.tomsapp.Toms.V2.session.BasketSession;
-import io.specto.hoverfly.junit.core.Hoverfly;
-import io.specto.hoverfly.junit.core.model.Simulation;
-import io.specto.hoverfly.junit5.HoverflyExtension;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockserver.client.MockServerClient;
-import org.mockserver.integration.ClientAndServer;
-import org.mockserver.model.Header;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-import static com.tomsapp.Toms.V2.mapper.StudentAddressMaper.mapToStudentAddressDtoFromStudent;
-import static io.specto.hoverfly.junit.core.SimulationSource.classpath;
-import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.created;
@@ -70,7 +34,6 @@ import static org.hamcrest.Matchers.emptyString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
-import static org.mockserver.matchers.Times.exactly;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 import static org.mockserver.model.OpenAPIDefinition.openAPI;
@@ -163,7 +126,7 @@ class PaymentControllerTest {
         when(borrowService.logInStudentHasRightToOrder()).thenReturn(true);
         when(borrowService.saveBorrowDto(borrow)).thenReturn(borrow);
 
-        when(paypalService.createPayment(borrow,paymentController.successPaypalUrl,paymentController.cancelPaypalUrl)).thenReturn(payment);
+      //  when(paypalService.createPaymentHttpRes(borrow,paymentController.successPaypalUrl,paymentController.cancelPaypalUrl)).thenReturn(payment);
 
         //then
 
